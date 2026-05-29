@@ -17,7 +17,7 @@
     </div>
   @endif
 
-  <form action="{{ route('admin.products.update', $product) }}" method="POST">
+  <form action="{{ route('admin.products.update', $product) }}" method="POST" enctype="multipart/form-data">
     @csrf @method('PUT')
     @include('admin.products._form')
     <div class="flex items-center gap-3 mt-8 pt-6 border-t border-gray-100">

@@ -1,5 +1,9 @@
 {{-- Reusable product form partial --}}
-@php $isEdit = isset($product); @endphp
+@php
+  $isEdit = isset($product);
+  $isLocalImage = $isEdit && $product->image_url && str_contains($product->image_url, 'uploads/products/');
+  $defaultSource = ($isEdit && !$isLocalImage && $product->image_url) ? 'url' : 'upload';
+@endphp
 
 <div class="grid lg:grid-cols-2 gap-6">
   {{-- LEFT --}}
@@ -51,13 +55,40 @@
   {{-- RIGHT --}}
   <div class="space-y-5">
     <div>
-      <label class="block text-gray-700 font-semibold text-sm mb-1.5">URL Gambar <span class="text-red-500">*</span></label>
-      <input type="url" name="image_url" id="image_url_input"
-             value="{{ old('image_url', $product->image_url ?? '') }}" required
-             oninput="previewImg(this.value)"
-             class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all"
-             placeholder="https://images.unsplash.com/..."/>
-      <div class="mt-2 rounded-xl overflow-hidden border border-gray-100 aspect-video bg-gray-50 flex items-center justify-center">
+      <label class="block text-gray-700 font-semibold text-sm mb-1.5">Foto Produk <span class="text-red-500">*</span></label>
+      
+      {{-- Mini Tab Header --}}
+      <div class="bg-gray-100 p-1 rounded-xl flex gap-1 mb-3 text-xs font-semibold">
+        <button type="button" onclick="switchImageSource('upload')" id="btn-src-upload"
+                class="flex-1 py-1.5 rounded-lg transition-all text-center">
+          📁 Unggah File
+        </button>
+        <button type="button" onclick="switchImageSource('url')" id="btn-src-url"
+                class="flex-1 py-1.5 rounded-lg transition-all text-center">
+          🔗 Gunakan URL
+        </button>
+      </div>
+
+      {{-- Tab Content: Upload --}}
+      <div id="src-upload-pane" class="space-y-2">
+        <input type="file" name="image" id="image_file_input" accept="image/*"
+               onchange="previewFile(this)"
+               class="w-full bg-gray-50 hover:bg-gray-100/50 border border-gray-200 focus:border-emerald-500 rounded-xl px-4 py-2.5 text-sm outline-none font-medium text-gray-800 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer"/>
+        <p class="text-gray-400 text-xs">Format file: JPG, JPEG, PNG, WEBP.</p>
+      </div>
+
+      {{-- Tab Content: URL --}}
+      <div id="src-url-pane" class="space-y-2 hidden">
+        <input type="url" name="image_url" id="image_url_input"
+               value="{{ old('image_url', $product->image_url ?? '') }}"
+               oninput="previewImg(this.value)"
+               class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all"
+               placeholder="https://images.unsplash.com/..."/>
+        <p class="text-gray-400 text-xs">Masukkan URL gambar dari internet.</p>
+      </div>
+
+      {{-- Image Preview Card --}}
+      <div class="mt-3 rounded-xl overflow-hidden border border-gray-100 aspect-video bg-gray-50 flex items-center justify-center relative group">
         <img id="img_preview" src="{{ $product->image_url ?? '' }}" alt="Preview"
              class="w-full h-full object-cover {{ ($product->image_url ?? '') ? '' : 'hidden' }}"/>
         <span id="img_placeholder" class="{{ ($product->image_url ?? '') ? 'hidden' : '' }} text-gray-300 text-sm">Preview gambar</span>
@@ -137,6 +168,25 @@
 
 @push('scripts')
 <script>
+  function switchImageSource(source) {
+    const uploadPane = document.getElementById('src-upload-pane');
+    const urlPane = document.getElementById('src-url-pane');
+    const btnUpload = document.getElementById('btn-src-upload');
+    const btnUrl = document.getElementById('btn-src-url');
+
+    if (source === 'upload') {
+      uploadPane.classList.remove('hidden');
+      urlPane.classList.add('hidden');
+      btnUpload.className = "flex-1 py-1.5 rounded-lg transition-all text-center bg-white text-emerald-950 shadow-sm";
+      btnUrl.className = "flex-1 py-1.5 rounded-lg transition-all text-center text-gray-500 hover:text-emerald-950";
+    } else {
+      uploadPane.classList.add('hidden');
+      urlPane.classList.remove('hidden');
+      btnUrl.className = "flex-1 py-1.5 rounded-lg transition-all text-center bg-white text-emerald-950 shadow-sm";
+      btnUpload.className = "flex-1 py-1.5 rounded-lg transition-all text-center text-gray-500 hover:text-emerald-950";
+    }
+  }
+
   function previewImg(url) {
     const img = document.getElementById('img_preview');
     const placeholder = document.getElementById('img_placeholder');
@@ -149,5 +199,30 @@
       placeholder.classList.remove('hidden');
     }
   }
+
+  function previewFile(input) {
+    const file = input.files[0];
+    const img = document.getElementById('img_preview');
+    const placeholder = document.getElementById('img_placeholder');
+    if (file) {
+      img.src = URL.createObjectURL(file);
+      img.classList.remove('hidden');
+      placeholder.classList.add('hidden');
+    } else {
+      const urlInput = document.getElementById('image_url_input');
+      if (urlInput && urlInput.value) {
+        previewImg(urlInput.value);
+      } else {
+        img.classList.add('hidden');
+        placeholder.classList.remove('hidden');
+      }
+    }
+  }
+
+  // Set default state based on Blade variables on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    const defaultSource = "{{ $defaultSource }}";
+    switchImageSource(defaultSource);
+  });
 </script>
 @endpush
