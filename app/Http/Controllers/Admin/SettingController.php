@@ -18,18 +18,21 @@ class SettingController extends Controller
     {
         $request->validate([
             'store_name'         => 'required|string|max:100',
+            'store_logo'         => 'nullable|image',
+            'delete_store_logo'  => 'nullable|boolean',
             'wa_number'          => 'required|string|max:20',
             'address'            => 'required|string',
             'opening_hours'      => 'required|string',
             'shipping_info'      => 'required|string',
             'maps_embed_url'     => 'nullable|string',
+            'branches'           => 'nullable|string',
             'instagram'          => 'nullable|url',
             'facebook'           => 'nullable|url',
             
             'hero_tagline'       => 'nullable|string|max:100',
             'hero_headline'      => 'nullable|string|max:150',
             'hero_sub'           => 'nullable|string',
-            'hero_bg_image'      => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp',
+            'hero_bg_image'      => 'nullable|image',
             
             'stat_1_val'         => 'required|string|max:50',
             'stat_1_lbl'         => 'required|string|max:100',
@@ -42,7 +45,7 @@ class SettingController extends Controller
             
             'about_headline'     => 'required|string|max:200',
             'about_sub'          => 'nullable|string',
-            'about_image'        => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp',
+            'about_image'        => 'nullable|image',
             'about_title_detail' => 'required|string|max:200',
             'about_desc_1'       => 'required|string',
             'about_desc_2'       => 'nullable|string',
@@ -75,7 +78,7 @@ class SettingController extends Controller
         ]);
 
         $keys = [
-            'store_name', 'wa_number', 'address', 'opening_hours', 'shipping_info', 'maps_embed_url',
+            'store_name', 'wa_number', 'address', 'opening_hours', 'shipping_info', 'maps_embed_url', 'branches',
             'instagram', 'facebook', 'hero_tagline', 'hero_headline', 'hero_sub',
             'stat_1_val', 'stat_1_lbl', 'stat_2_val', 'stat_2_lbl', 'stat_3_val', 'stat_3_lbl', 'stat_4_val', 'stat_4_lbl',
             'about_headline', 'about_sub', 'about_title_detail', 'about_desc_1', 'about_desc_2',
@@ -89,7 +92,17 @@ class SettingController extends Controller
             Setting::set($key, $request->input($key));
         }
 
-        // Handle File Uploads
+        // Handle File Uploads & Deletion
+        if ($request->has('delete_store_logo') && $request->input('delete_store_logo') == 1) {
+            Setting::set('store_logo', null);
+        } elseif ($request->hasFile('store_logo')) {
+            $file = $request->file('store_logo');
+            $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/settings'), $filename);
+            $store_logo_url = asset('uploads/settings/' . $filename);
+            Setting::set('store_logo', $store_logo_url);
+        }
+
         if ($request->hasFile('hero_bg_image')) {
             $file = $request->file('hero_bg_image');
             $filename = 'hero_bg_' . time() . '.' . $file->getClientOriginalExtension();

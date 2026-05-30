@@ -65,6 +65,32 @@
                    class="w-full bg-gray-50 hover:bg-gray-100/50 focus:bg-white border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 rounded-xl px-4 py-3 text-sm transition-all outline-none font-medium text-gray-800" required>
           </div>
 
+          {{-- Logo Toko --}}
+          <div class="border-t border-gray-50 pt-4 space-y-3">
+            <label class="block text-gray-700 font-semibold text-sm mb-1.5">Logo Toko (Opsional)</label>
+            <div class="flex items-center gap-4">
+              <div id="store-logo-preview" class="w-14 h-14 bg-gradient-to-br from-emerald-900 to-emerald-800 rounded-xl flex items-center justify-center overflow-hidden shadow-inner border border-emerald-700/20 flex-shrink-0">
+                @if(!empty($settings['store_logo']))
+                  <img src="{{ $settings['store_logo'] }}" class="h-full w-full object-contain p-1">
+                @else
+                  <span class="text-2xl leading-none">🌴</span>
+                @endif
+              </div>
+              <div class="flex-grow space-y-2">
+                <input type="file" name="store_logo" accept="image/*" onchange="previewImage(this, 'store-logo-preview', '🌴')"
+                       class="w-full bg-gray-50 hover:bg-gray-100/50 border border-gray-200 focus:border-emerald-500 rounded-xl px-3 py-2 text-xs outline-none font-medium text-gray-800 file:mr-3 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-3xs file:font-bold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
+                @if(!empty($settings['store_logo']))
+                  <label class="flex items-center gap-2 text-xs text-red-500 font-semibold cursor-pointer select-none">
+                    <input type="checkbox" name="delete_store_logo" value="1" class="rounded text-red-600 focus:ring-red-500/20 border-gray-300">
+                    <span>Hapus logo kustom & gunakan default 🌴</span>
+                  </label>
+                @else
+                  <p class="text-3xs text-gray-400">Jika dikosongkan, default emoji 🌴 dan teks akan digunakan.</p>
+                @endif
+              </div>
+            </div>
+          </div>
+
           <div>
             <label class="block text-gray-700 font-semibold text-sm mb-1.5">Nomor WhatsApp</label>
             <input type="text" name="wa_number" value="{{ old('wa_number', $settings['wa_number'] ?? '') }}" 
@@ -115,10 +141,34 @@
                      class="w-full bg-gray-50 hover:bg-gray-100/50 focus:bg-white border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 rounded-xl px-4 py-3 text-sm transition-all outline-none font-medium text-gray-800">
             </div>
           </div>
+      </div>
+
+      {{-- Card: Cabang Toko Resmi --}}
+      <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-5">
+        <div class="flex items-center justify-between border-b border-gray-50 pb-3 flex-wrap gap-2">
+          <h3 class="font-extrabold text-emerald-950 text-base flex items-center gap-2">
+            <span>📍</span> Cabang Toko Resmi
+          </h3>
+          <button type="button" onclick="addBranchRow()" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-extrabold text-xs px-4 py-2 rounded-xl transition-colors cursor-pointer flex items-center gap-1.5">
+            <span>＋</span> Tambah Cabang
+          </button>
         </div>
 
+        <p class="text-xs text-gray-500 leading-relaxed">
+          Tambahkan cabang-cabang resmi toko Anda. Jika cabang ditambahkan, halaman utama akan menampilkan daftar cabang interaktif beserta peta khusus dan WhatsApp per cabang. Jika dikosongkan, halaman utama akan otomatis menggunakan info default di atas.
+        </p>
+
+        {{-- Hidden input for branches JSON --}}
+        <input type="hidden" name="branches" id="branches-json-input" value="{{ old('branches', $settings['branches'] ?? '[]') }}">
+
+        {{-- Branch Rows Container --}}
+        <div id="branch-rows-container" class="space-y-4">
+          {{-- Dynamic branch rows will be rendered here by Javascript --}}
+        </div>
       </div>
+
     </div>
+  </div>
 
     {{-- TAB 2: BANNER HERO --}}
     <div id="tab-hero" class="tab-pane space-y-6 hidden">
@@ -151,7 +201,7 @@
         <div class="grid md:grid-cols-3 gap-6 items-end">
           <div class="md:col-span-1">
             <label class="block text-gray-700 font-semibold text-sm mb-1.5">Gambar Hero Saat Ini</label>
-            <div class="h-32 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-center overflow-hidden">
+            <div id="hero-bg-preview" class="h-32 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-center overflow-hidden">
               @if(!empty($settings['hero_bg_image']))
                 <img src="{{ $settings['hero_bg_image'] }}" class="h-full w-full object-cover">
               @else
@@ -161,7 +211,7 @@
           </div>
           <div class="md:col-span-2">
             <label class="block text-gray-700 font-semibold text-sm mb-1.5">Unggah Gambar Latar Belakang Baru (Hero Background)</label>
-            <input type="file" name="hero_bg_image" accept="image/*"
+            <input type="file" name="hero_bg_image" accept="image/*" onchange="previewImage(this, 'hero-bg-preview', 'Belum ada gambar')"
                    class="w-full bg-gray-50 hover:bg-gray-100/50 border border-gray-200 focus:border-emerald-500 rounded-xl px-4 py-3 text-sm outline-none font-medium text-gray-800 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
             <p class="text-xs text-gray-400 mt-1.5">Format file: JPG, JPEG, PNG, WEBP.</p>
           </div>
@@ -283,7 +333,7 @@
         <div class="grid md:grid-cols-3 gap-6 items-end">
           <div class="md:col-span-1">
             <label class="block text-gray-700 font-semibold text-sm mb-1.5">Gambar Toko Saat Ini</label>
-            <div class="h-32 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-center overflow-hidden">
+            <div id="about-img-preview" class="h-32 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-center overflow-hidden">
               @if(!empty($settings['about_image']))
                 <img src="{{ $settings['about_image'] }}" class="h-full w-full object-cover">
               @else
@@ -293,7 +343,7 @@
           </div>
           <div class="md:col-span-2">
             <label class="block text-gray-700 font-semibold text-sm mb-1.5">Unggah Gambar Toko Baru (Tentang Kami Image)</label>
-            <input type="file" name="about_image" accept="image/*"
+            <input type="file" name="about_image" accept="image/*" onchange="previewImage(this, 'about-img-preview', 'Belum ada gambar')"
                    class="w-full bg-gray-50 hover:bg-gray-100/50 border border-gray-200 focus:border-emerald-500 rounded-xl px-4 py-3 text-sm outline-none font-medium text-gray-800 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
             <p class="text-xs text-gray-400 mt-1.5">Format file: JPG, JPEG, PNG, WEBP.</p>
           </div>
@@ -512,5 +562,137 @@
     evt.currentTarget.classList.remove('border-transparent', 'text-gray-500');
     evt.currentTarget.classList.add('border-emerald-700', 'text-emerald-700');
   }
+
+  // Live image preview helper
+  function previewImage(input, previewId, fallbackText) {
+    const file = input.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const previewDiv = document.getElementById(previewId);
+        if (previewId === 'store-logo-preview') {
+          previewDiv.innerHTML = `<img src="${e.target.result}" class="h-full w-full object-contain p-1">`;
+        } else {
+          previewDiv.innerHTML = `<img src="${e.target.result}" class="h-full w-full object-cover">`;
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Store Branches Manager State
+  let branchesData = [];
+  try {
+    const rawVal = document.getElementById('branches-json-input').value;
+    branchesData = JSON.parse(rawVal || '[]');
+  } catch (e) {
+    branchesData = [];
+  }
+
+  function renderBranches() {
+    const container = document.getElementById('branch-rows-container');
+    if (branchesData.length === 0) {
+      container.innerHTML = `
+        <div class="text-center py-8 border border-dashed border-gray-200 rounded-2xl bg-gray-50/50">
+          <span class="text-3xl">📍</span>
+          <p class="text-xs text-gray-400 mt-2 font-medium">Belum ada cabang terdaftar. Klik tombol di atas untuk menambah cabang.</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = branchesData.map((branch, index) => renderBranchRow(branch, index)).join('');
+  }
+
+  function renderBranchRow(branch, index) {
+    return `
+      <div class="branch-row-card p-5 bg-slate-50/50 border border-slate-100 rounded-2xl relative space-y-4 group transition-all duration-200 hover:border-emerald-100 hover:bg-emerald-50/10" data-index="${index}">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+          <h4 class="font-bold text-xs text-slate-800 flex items-center gap-1.5">
+            <span class="w-5 h-5 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center text-3xs font-extrabold">${index + 1}</span>
+            <span>Detail Cabang Resmi</span>
+          </h4>
+          <button type="button" onclick="deleteBranchRow(${index})" class="text-red-500 hover:text-red-700 text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer">
+            <span>🗑️</span> Hapus Cabang
+          </button>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-slate-700 font-semibold text-xs mb-1">Nama Cabang / Wilayah</label>
+            <input type="text" value="${escapeHtml(branch.name || '')}" oninput="updateBranchField(${index}, 'name', this.value)"
+                   placeholder="Contoh: Cabang Cianjur"
+                   class="w-full bg-white border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 rounded-lg px-3 py-2 text-xs transition-all outline-none font-semibold text-slate-800" required>
+          </div>
+          <div>
+            <label class="block text-slate-700 font-semibold text-xs mb-1">Nomor WhatsApp Cabang</label>
+            <input type="text" value="${escapeHtml(branch.wa_number || '')}" oninput="updateBranchField(${index}, 'wa_number', this.value)"
+                   placeholder="Contoh: 6281234567890"
+                   class="w-full bg-white border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 rounded-lg px-3 py-2 text-xs transition-all outline-none font-medium text-slate-800" required>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-slate-700 font-semibold text-xs mb-1">Alamat Lengkap Cabang</label>
+            <textarea rows="2" oninput="updateBranchField(${index}, 'address', this.value)"
+                      placeholder="Masukkan alamat lengkap cabang..."
+                      class="w-full bg-white border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 rounded-lg px-3 py-2 text-xs transition-all outline-none font-medium text-slate-800" required>${escapeHtml(branch.address || '')}</textarea>
+          </div>
+          <div>
+            <label class="block text-slate-700 font-semibold text-xs mb-1">Link Iframe Google Maps (Embed URL)</label>
+            <textarea rows="2" oninput="updateBranchField(${index}, 'maps_embed_url', this.value)"
+                      placeholder="https://www.google.com/maps/embed?pb=..."
+                      class="w-full bg-white border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 rounded-lg px-3 py-2 text-xs transition-all outline-none font-medium text-slate-800">${escapeHtml(branch.maps_embed_url || '')}</textarea>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function addBranchRow() {
+    branchesData.push({
+      name: '',
+      wa_number: '',
+      address: '',
+      maps_embed_url: ''
+    });
+    saveBranchesToInput();
+    renderBranches();
+  }
+
+  function deleteBranchRow(index) {
+    if (confirm('Apakah Anda yakin ingin menghapus cabang ini?')) {
+      branchesData.splice(index, 1);
+      saveBranchesToInput();
+      renderBranches();
+    }
+  }
+
+  function updateBranchField(index, field, value) {
+    if (branchesData[index]) {
+      branchesData[index][field] = value;
+      saveBranchesToInput();
+    }
+  }
+
+  function saveBranchesToInput() {
+    document.getElementById('branches-json-input').value = JSON.stringify(branchesData);
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  // Initial render
+  document.addEventListener('DOMContentLoaded', () => {
+    renderBranches();
+  });
 </script>
 @endsection

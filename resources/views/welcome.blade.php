@@ -15,6 +15,10 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- Swiper CSS CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+
   <script>
     tailwind.config = {
       theme: {
@@ -73,9 +77,30 @@
     }
     .wa-float { animation: pulseGlow 2.5s ease-in-out infinite; }
 
-    /* Scroll reveal */
-    .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
+    /* Modern Scroll Reveal System */
+    .reveal,
+    [class*="reveal-"] {
+      opacity: 0;
+      transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform, opacity;
+    }
+
+    .reveal,
+    .reveal-slide-up { transform: translateY(50px); }
+    .reveal-slide-down { transform: translateY(-50px); }
+    .reveal-slide-left { transform: translateX(50px); }
+    .reveal-slide-right { transform: translateX(-50px); }
+    .reveal-zoom-in { transform: scale(0.94); }
+    .reveal-zoom-out { transform: scale(1.06); }
+    .reveal-fade { transform: none; }
+
+    /* When visible */
+    .reveal.visible,
+    [class*="reveal-"].visible {
+      opacity: 1;
+      transform: translate(0) scale(1);
+    }
 
     /* Gold shimmer */
     .gold-shimmer {
@@ -102,6 +127,141 @@
     /* Wave divider */
     .wave-divider { overflow: hidden; line-height: 0; }
     .wave-divider svg { display: block; }
+
+    /* Custom Swiper Styles */
+    .swiper-pagination-bullet {
+      background: #064e3b !important;
+      opacity: 0.3 !important;
+      width: 10px !important;
+      height: 10px !important;
+      transition: all 0.3s ease !important;
+    }
+    .swiper-pagination-bullet-active {
+      background: #d97706 !important;
+      width: 24px !important;
+      border-radius: 5px !important;
+      opacity: 1 !important;
+    }
+    .swiper-slide {
+      height: auto !important;
+    }
+
+    /* Premium Product Card Upgrades */
+    .product-card {
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                  box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                  border-color 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    .product-card:hover {
+      transform: translateY(-12px) scale(1.015);
+      box-shadow: 0 30px 60px rgba(6, 78, 59, 0.12),
+                  0 0 0 1px rgba(245, 158, 11, 0.2) inset !important;
+      border-color: rgba(245, 158, 11, 0.3) !important;
+    }
+
+    /* Product Image Smooth Zoom & Subtle Rotate */
+    .product-card img {
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    .product-card:hover img {
+      transform: scale(1.08) rotate(1deg);
+    }
+
+    /* Swiper Navigation Micro-interactions with Spring Ease */
+    .swiper-prev-btn {
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    .swiper-prev-btn:hover {
+      transform: translateY(-50%) scale(1.15) translateX(-4px) !important;
+      box-shadow: 0 10px 25px rgba(6, 78, 59, 0.15) !important;
+    }
+
+    .swiper-next-btn {
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    .swiper-next-btn:hover {
+      transform: translateY(-50%) scale(1.15) translateX(4px) !important;
+      box-shadow: 0 10px 25px rgba(6, 78, 59, 0.15) !important;
+    }
+
+    /* WhatsApp Button Shimmer & Premium Hover */
+    .btn-premium-wa {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    .btn-premium-wa:hover {
+      transform: scale(1.03);
+      box-shadow: 0 12px 25px rgba(6, 78, 59, 0.2);
+    }
+    .btn-premium-wa::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+      );
+      transition: all 0.6s ease;
+    }
+    .btn-premium-wa:hover::after {
+      left: 100%;
+    }
+
+    /* Sparkling Green Animations for White CTA Background */
+    @keyframes floatGlow {
+      0%, 100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.15;
+      }
+      50% {
+        transform: translate(60px, -40px) scale(1.25);
+        opacity: 0.45;
+      }
+    }
+    @keyframes sweepShimmer {
+      0% {
+        transform: translateX(-100%) rotate(25deg);
+      }
+      100% {
+        transform: translateX(100%) rotate(25deg);
+      }
+    }
+    .animate-float-glow-1 {
+      animation: floatGlow 10s ease-in-out infinite;
+    }
+    .animate-float-glow-2 {
+      animation: floatGlow 14s ease-in-out infinite;
+      animation-delay: 3s;
+    }
+    .shimmer-sweep {
+      position: relative;
+      overflow: hidden;
+    }
+    .shimmer-sweep::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to right,
+        transparent,
+        rgba(16, 185, 129, 0.05) 25%,
+        rgba(16, 185, 129, 0.28) 50%,
+        rgba(16, 185, 129, 0.05) 75%,
+        transparent
+      );
+      transform: rotate(25deg);
+      animation: sweepShimmer 5s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+      pointer-events: none;
+    }
   </style>
 </head>
 
@@ -123,7 +283,11 @@
     // Dynamic additions
     $heroBgImage = $settings['hero_bg_image'] ?? 'https://images.unsplash.com/photo-1571680322279-a226e6a4cc2a?w=1600&q=80&auto=format&fit=crop';
     $shippingInfo = $settings['shipping_info'] ?? 'Antar gratis area Cianjur kota (min. order 500g). Pengiriman seluruh Indonesia via JNE, J&T, SiCepat.';
-    $mapsEmbedUrl = $settings['maps_embed_url'] ?? 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15837.356714929936!2d107.13403!3d-6.82185!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68a96e1b5a9cf9%3A0x20e0d4987d91a09c!2sCianjur%2C%20West%20Java!5e0!3m2!1sen!2sid!4v1680000000000!5m2!1sen!2sid';
+    $mapsEmbedUrlRaw = $settings['maps_embed_url'] ?? '';
+    $mapsEmbedUrl = !empty($mapsEmbedUrlRaw) && str_contains($mapsEmbedUrlRaw, 'embed')
+      ? $mapsEmbedUrlRaw
+      : (!empty($addressVal) ? "https://maps.google.com/maps?q=" . urlencode($storeName . ' ' . $addressVal) . "&t=&z=15&ie=UTF8&iwloc=&output=embed" : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15837.356714929936!2d107.13403!3d-6.82185!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68a96e1b5a9cf9%3A0x20e0d4987d91a09c!2sCianjur%2C%20West%20Java!5e0!3m2!1sen!2sid!4v1680000000000!5m2!1sen!2sid");
+    $branches = json_decode($settings['branches'] ?? '[]', true);
     
     // Stats
     $stats = [
@@ -168,13 +332,19 @@
 
         {{-- Logo --}}
         <a href="#beranda" class="flex items-center gap-2.5 group">
-          <div class="w-9 h-9 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
-            <span class="text-emerald-950 font-black text-lg leading-none">🌴</span>
-          </div>
-          <div>
-            <div class="text-white font-extrabold text-base leading-tight tracking-tight">{{ $firstWord }}</div>
-            <div class="text-yellow-400 font-semibold text-xs leading-tight tracking-wider uppercase">{{ $secondWord }}</div>
-          </div>
+          @if(!empty($settings['store_logo']))
+            <div class="flex items-center justify-center h-11 px-3 bg-white border border-gray-100 rounded-xl shadow-sm transition-all duration-300 group-hover:scale-[1.03] group-hover:shadow-md">
+              <img src="{{ $settings['store_logo'] }}" alt="{{ $storeName }}" class="h-8 w-auto object-contain transition-transform duration-300" style="image-rendering: -webkit-optimize-contrast;">
+            </div>
+          @else
+            <div class="w-9 h-9 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+              <span class="text-emerald-950 font-black text-lg leading-none">🌴</span>
+            </div>
+            <div>
+              <div class="text-white font-extrabold text-base leading-tight tracking-tight">{{ $firstWord }}</div>
+              <div class="text-yellow-400 font-semibold text-xs leading-tight tracking-wider uppercase">{{ $secondWord }}</div>
+            </div>
+          @endif
         </a>
 
         {{-- Desktop Nav --}}
@@ -349,11 +519,11 @@
         </div>
 
         {{-- Main content grid --}}
-        <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-16">
+        <div class="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center mb-16">
 
-          {{-- Image --}}
-          <div class="relative reveal">
-            <div class="relative rounded-3xl overflow-hidden shadow-2xl aspect-[4/3]">
+          {{-- Image Column --}}
+          <div class="lg:col-span-5 relative reveal-slide-right w-full max-w-md sm:max-w-lg lg:max-w-none mx-auto">
+            <div class="relative rounded-3xl overflow-hidden shadow-2xl aspect-[3/2]">
               <img
                 src="{{ $aboutImage }}"
                 alt="Tampilan Dalam Toko"
@@ -381,9 +551,9 @@
               </div>
             </div>
           </div>
-
-          {{-- Content --}}
-          <div class="reveal" style="transition-delay: 0.2s">
+ 
+          {{-- Content Column --}}
+          <div class="lg:col-span-7 reveal-slide-left w-full" style="transition-delay: 0.15s">
             <h3 class="text-2xl sm:text-3xl font-extrabold text-emerald-950 mb-5 leading-tight">
               {!! nl2br(e($aboutTitleDetail)) !!}
             </h3>
@@ -447,81 +617,106 @@
           </p>
         </div>
 
-        {{-- Product grid --}}
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          @forelse($products as $index => $product)
-            @php
-              // Calculate discount percentage if old price and price both look numeric
-              $discount = '';
-              if ($product->old_price && $product->price) {
-                  $p1 = (int) preg_replace('/\D/', '', $product->old_price);
-                  $p2 = (int) preg_replace('/\D/', '', $product->price);
-                  if ($p1 > $p2 && $p1 > 0) {
-                      $pct = round((($p1 - $p2) / $p1) * 100);
-                      $discount = 'Hemat ' . $pct . '%';
+        {{-- Product slider --}}
+        <div class="relative px-4 sm:px-12 reveal">
+          <div class="swiper productSwiper overflow-hidden">
+            <div class="swiper-wrapper">
+              @forelse($products as $index => $product)
+                @php
+                  // Calculate discount percentage if old price and price both look numeric
+                  $discount = '';
+                  if ($product->old_price && $product->price) {
+                      $p1 = (int) preg_replace('/\D/', '', $product->old_price);
+                      $p2 = (int) preg_replace('/\D/', '', $product->price);
+                      if ($p1 > $p2 && $p1 > 0) {
+                          $pct = round((($p1 - $p2) / $p1) * 100);
+                          $discount = 'Hemat ' . $pct . '%';
+                      }
                   }
-              }
-            @endphp
-            <article class="product-card bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100 reveal" style="transition-delay: {{ ($index % 3) * 0.1 }}s">
-              <div class="relative overflow-hidden aspect-[4/3]">
-                <img
-                  src="{{ $product->image_url }}"
-                  alt="{{ $product->name }}"
-                  class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
-                />
-                @if($product->badge_label)
-                  <div class="absolute top-3 left-3">
-                    <span class="{{ $product->badge_class ?? 'bg-yellow-500 text-emerald-950' }} font-bold text-xs px-3 py-1 rounded-full shadow">
-                      {{ $product->badge_label }}
-                    </span>
-                  </div>
-                @endif
-                <div class="absolute top-3 right-3">
-                  <span class="bg-emerald-900/80 text-white font-semibold text-xs px-2.5 py-1 rounded-full backdrop-blur-sm">
-                    {{ $product->origin }}
-                  </span>
+                @endphp
+                <div class="swiper-slide py-6">
+                  <article class="product-card h-full bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100 flex flex-col justify-between">
+                    <div>
+                      <div class="relative overflow-hidden aspect-[4/3] flex-shrink-0">
+                        <img
+                          src="{{ $product->image_url }}"
+                          alt="{{ $product->name }}"
+                          class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                          loading="lazy"
+                        />
+                        @if($product->badge_label)
+                          <div class="absolute top-3 left-3">
+                            <span class="{{ $product->badge_class ?? 'bg-yellow-500 text-emerald-950' }} font-bold text-xs px-3 py-1 rounded-full shadow">
+                              {{ $product->badge_label }}
+                            </span>
+                          </div>
+                        @endif
+                        <div class="absolute top-3 right-3">
+                          <span class="bg-emerald-900/80 text-white font-semibold text-xs px-2.5 py-1 rounded-full backdrop-blur-sm">
+                            {{ $product->origin }}
+                          </span>
+                        </div>
+                      </div>
+                      <div class="p-5 sm:p-6">
+                        <h3 class="font-extrabold text-emerald-950 text-xl mb-1.5">{{ $product->name }}</h3>
+                        <p class="text-gray-500 text-sm font-medium leading-relaxed mb-4">{{ $product->description }}</p>
+                      </div>
+                    </div>
+                    <div class="px-5 pb-5 sm:px-6 sm:pb-6">
+                      <div class="flex items-center justify-between mb-4">
+                        <div>
+                          <div class="text-yellow-600 font-black text-2xl">{{ $product->price }}</div>
+                          <div class="text-gray-400 text-xs font-medium">{{ $product->unit ?? 'per 500 gram' }}</div>
+                        </div>
+                        <div class="text-right">
+                          @if($product->old_price)
+                            <div class="text-gray-400 line-through text-sm">{{ $product->old_price }}</div>
+                            @if($discount)
+                              <div class="bg-red-50 text-red-500 font-bold text-xs px-2 py-0.5 rounded-full">{{ $discount }}</div>
+                            @endif
+                          @else
+                            <span class="bg-emerald-50 text-emerald-700 font-bold text-xs px-2 py-0.5 rounded-full">🌟 Stok Terbatas</span>
+                          @endif
+                        </div>
+                      </div>
+                      <a
+                        id="btn-beli-{{ $product->id }}"
+                        href="https://wa.me/{{ $waNumClean }}?text={{ $product->wa_text ?? 'Halo%20Admin%20Pusat%20Kurma%2C%20saya%20tertarik%20dengan%20produk%20' . urlencode($product->name) }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn-premium-wa flex items-center justify-center gap-2 {{ $product->btn_class ?? 'bg-emerald-900 hover:bg-emerald-800 text-white' }} font-bold text-sm px-4 py-3.5 rounded-xl w-full transition-all duration-200 hover:shadow-lg min-h-[48px]"
+                      >
+                        <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                        </svg>
+                        Beli Sekarang
+                      </a>
+                    </div>
+                  </article>
                 </div>
-              </div>
-              <div class="p-5 sm:p-6">
-                <h3 class="font-extrabold text-emerald-950 text-xl mb-1.5">{{ $product->name }}</h3>
-                <p class="text-gray-500 text-sm font-medium leading-relaxed mb-4">{{ $product->description }}</p>
-                <div class="flex items-center justify-between mb-4">
-                  <div>
-                    <div class="text-yellow-600 font-black text-2xl">{{ $product->price }}</div>
-                    <div class="text-gray-400 text-xs font-medium">{{ $product->unit ?? 'per 500 gram' }}</div>
-                  </div>
-                  <div class="text-right">
-                    @if($product->old_price)
-                      <div class="text-gray-400 line-through text-sm">{{ $product->old_price }}</div>
-                      @if($discount)
-                        <div class="bg-red-50 text-red-500 font-bold text-xs px-2 py-0.5 rounded-full">{{ $discount }}</div>
-                      @endif
-                    @else
-                      <span class="bg-emerald-50 text-emerald-700 font-bold text-xs px-2 py-0.5 rounded-full">🌟 Stok Terbatas</span>
-                    @endif
-                  </div>
+              @empty
+                <div class="swiper-slide py-16 text-center text-gray-400">
+                  <span class="text-4xl">🛍️</span>
+                  <p class="font-semibold mt-2">Belum ada produk aktif saat ini.</p>
                 </div>
-                <a
-                  id="btn-beli-{{ $product->id }}"
-                  href="https://wa.me/{{ $waNumClean }}?text={{ $product->wa_text ?? 'Halo%20Admin%20Pusat%20Kurma%2C%20saya%20tertarik%20dengan%20produk%20' . urlencode($product->name) }}"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="flex items-center justify-center gap-2 {{ $product->btn_class ?? 'bg-emerald-900 hover:bg-emerald-800 text-white' }} font-bold text-sm px-4 py-3.5 rounded-xl w-full transition-all duration-200 hover:shadow-lg min-h-[48px]"
-                >
-                  <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                  </svg>
-                  Beli Sekarang
-                </a>
-              </div>
-            </article>
-          @empty
-            <div class="col-span-full py-16 text-center text-gray-400">
-              <span class="text-4xl">🛍️</span>
-              <p class="font-semibold mt-2">Belum ada produk aktif saat ini.</p>
+              @endforelse
             </div>
-          @endforelse
+            
+            {{-- Pagination dots --}}
+            <div class="swiper-pagination !relative !bottom-0 mt-8"></div>
+          </div>
+
+          {{-- Navigation Arrows (hidden on mobile, visible on lg screens) --}}
+          <button class="swiper-prev-btn absolute top-1/2 -left-4 -translate-y-1/2 w-12 h-12 bg-white text-emerald-900 border border-emerald-100 hover:bg-emerald-900 hover:text-white rounded-full flex items-center justify-center shadow-lg transition-all duration-300 z-10 hidden lg:flex" aria-label="Previous Slide">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/>
+            </svg>
+          </button>
+          <button class="swiper-next-btn absolute top-1/2 -right-4 -translate-y-1/2 w-12 h-12 bg-white text-emerald-900 border border-emerald-100 hover:bg-emerald-900 hover:text-white rounded-full flex items-center justify-center shadow-lg transition-all duration-300 z-10 hidden lg:flex" aria-label="Next Slide">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/>
+            </svg>
+          </button>
         </div>
 
         {{-- View all CTA --}}
@@ -550,7 +745,7 @@
       <div class="absolute bottom-0 right-0 w-96 h-96 bg-emerald-800/20 rounded-full translate-x-1/2 translate-y-1/2 blur-3xl"></div>
 
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="text-center max-w-2xl mx-auto mb-14 reveal">
+        <div class="text-center max-w-2xl mx-auto mb-14 reveal-slide-up">
           <span class="inline-block text-yellow-400 font-bold text-sm tracking-widest uppercase mb-3">Testimoni Pelanggan</span>
           <h2 class="text-3xl sm:text-4xl font-black text-white leading-tight mb-3">Apa Kata Mereka? 💬</h2>
           <p class="text-white/60 text-base font-medium">Ribuan pelanggan puas mempercayai kami untuk kebutuhan kurma premium mereka.</p>
@@ -558,7 +753,7 @@
 
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           @forelse($testimonials as $index => $t)
-            <div class="reveal bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300" style="transition-delay: {{ $index * 0.1 }}s">
+            <div class="reveal-zoom-in bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300" style="transition-delay: {{ $index * 0.1 }}s">
               <div class="flex items-center gap-1 mb-3">
                 <span class="text-yellow-400 text-sm">★★★★★</span>
               </div>
@@ -585,13 +780,17 @@
     {{-- ============================================================
          CTA BANNER
     ============================================================ --}}
-    <section class="py-16 bg-gradient-to-br from-yellow-500 to-yellow-600 relative overflow-hidden">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10 reveal">
+    <section class="py-20 bg-white relative overflow-hidden border-y border-emerald-100/50 shimmer-sweep">
+      {{-- Decorative sparkling animated green glows --}}
+      <div class="absolute -top-12 -left-12 w-80 h-80 bg-emerald-400/40 rounded-full blur-3xl pointer-events-none animate-float-glow-1"></div>
+      <div class="absolute -bottom-12 -right-12 w-80 h-80 bg-emerald-300/30 rounded-full blur-3xl pointer-events-none animate-float-glow-2"></div>
+
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10 reveal-zoom-in">
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black text-emerald-950 mb-4 leading-tight">
           {!! nl2br(e($ctaHeadline)) !!}
         </h2>
         @if($ctaSub)
-          <p class="text-emerald-900/80 text-base sm:text-lg font-medium mb-8 max-w-2xl mx-auto">
+          <p class="text-emerald-900/70 text-base sm:text-lg font-medium mb-8 max-w-2xl mx-auto">
             {!! nl2br(e($ctaSub)) !!}
           </p>
         @endif
@@ -600,9 +799,9 @@
           href="https://wa.me/{{ $waNumClean }}?text=Halo%20Admin%20{{ urlencode($storeName) }}%21%20Saya%20ingin%20order%20kurma%20premium.%20Mohon%20bantu%20rekomendasikan%20produk%20yang%20cocok%20%F0%9F%99%8F"
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-3 bg-emerald-900 hover:bg-emerald-800 text-white font-extrabold text-lg px-10 py-5 rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105 min-h-[60px]"
+          class="inline-flex items-center gap-3 bg-emerald-900 hover:bg-emerald-800 text-white font-extrabold text-lg px-10 py-5 rounded-2xl shadow-xl hover:shadow-emerald-900/10 transition-all duration-300 hover:scale-105 min-h-[60px]"
         >
-          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+          <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
           </svg>
           Chat WhatsApp Sekarang
@@ -617,7 +816,7 @@
     <section id="kontak" class="py-20 lg:py-28 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <div class="text-center max-w-2xl mx-auto mb-14 reveal">
+        <div class="text-center max-w-2xl mx-auto mb-14 reveal-slide-up">
           <span class="inline-block text-emerald-700 font-bold text-sm tracking-widest uppercase mb-3">Hubungi Kami</span>
           <h2 class="text-3xl sm:text-4xl font-black text-emerald-950 leading-tight mb-3">Hubungi & Temukan Kami 📍</h2>
           <p class="text-gray-500 text-base font-medium">Kirimkan pesan Anda langsung melalui form di bawah ini atau kunjungi toko kami.</p>
@@ -627,56 +826,152 @@
         <div class="grid lg:grid-cols-12 gap-10 lg:gap-16 items-start mb-16">
 
           {{-- Left Column: Contact info (col-span-5) --}}
-          <div class="lg:col-span-5 reveal space-y-5">
-            <div class="flex items-start gap-4 bg-slate-50 rounded-2xl p-5 border border-slate-100">
-              <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                <span class="text-2xl">📍</span>
-              </div>
-              <div>
-                <div class="font-extrabold text-emerald-950 text-base mb-1">Alamat Toko</div>
-                <div class="text-gray-600 font-medium text-sm leading-relaxed">{!! nl2br(e($addressVal)) !!}</div>
-              </div>
-            </div>
+          <div class="lg:col-span-5 reveal-slide-right space-y-5">
+            @if(!empty($branches))
+              <div class="space-y-4">
+                <div class="font-extrabold text-emerald-950 text-lg flex items-center justify-between border-b border-slate-100 pb-2.5 flex-wrap gap-2">
+                  <div class="flex items-center gap-2">
+                    <span>📍</span> Cabang Resmi Toko Kami
+                  </div>
+                  {{-- Navigation Buttons for Branch Swiper --}}
+                  <div class="flex items-center gap-1.5 z-10">
+                    <button class="branch-prev-btn w-9 h-9 bg-white text-emerald-900 border border-emerald-100 hover:bg-emerald-900 hover:text-white rounded-xl flex items-center justify-center shadow-sm transition-all duration-200 cursor-pointer" aria-label="Sebelumnya">
+                      <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+                      </svg>
+                    </button>
+                    <button class="branch-next-btn w-9 h-9 bg-white text-emerald-900 border border-emerald-100 hover:bg-emerald-900 hover:text-white rounded-xl flex items-center justify-center shadow-sm transition-all duration-200 cursor-pointer" aria-label="Selanjutnya">
+                      <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                
+                {{-- Swiper Slider for Branches --}}
+                <div class="swiper branchSwiper rounded-2xl overflow-hidden pb-8 relative">
+                  <div class="swiper-wrapper">
+                    @foreach($branches as $index => $branch)
+                      @php
+                        $branchWaClean = preg_replace('/\D/', '', $branch['wa_number'] ?? '');
+                      @endphp
+                      <div class="swiper-slide h-auto">
+                        <div class="branch-card bg-slate-50 border border-slate-100 rounded-2xl p-5 space-y-4 hover:border-emerald-200 hover:bg-emerald-50/10 transition-all duration-200 group relative flex flex-col justify-between h-full">
+                          <div class="space-y-4">
+                            <div class="flex justify-between items-start gap-2">
+                              <h4 class="font-extrabold text-emerald-950 text-base group-hover:text-emerald-800 transition-colors">
+                                {{ $branch['name'] }}
+                              </h4>
+                              <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 text-2xs font-extrabold flex items-center justify-center flex-shrink-0">
+                                {{ $index + 1 }}
+                              </span>
+                            </div>
+                            <p class="text-gray-600 font-semibold text-xs leading-relaxed line-clamp-3">
+                              {{ $branch['address'] }}
+                            </p>
+                          </div>
 
-            <div class="flex items-start gap-4 bg-slate-50 rounded-2xl p-5 border border-slate-100">
-              <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                <span class="text-2xl">📱</span>
-              </div>
-              <div>
-                <div class="font-extrabold text-emerald-950 text-base mb-1">WhatsApp / Telepon</div>
-                <div class="text-gray-600 font-medium text-sm leading-relaxed">
-                  <a href="https://wa.me/{{ $waNumClean }}" class="text-emerald-700 font-bold hover:text-emerald-900 transition-colors">+{{ $settings['wa_number'] ?? '6281234567890' }}</a>
-                  <br/><span class="text-gray-400 text-xs">Senin – Sabtu: 08.00 – 20.00 WIB</span>
+                          <div class="flex flex-wrap gap-2 pt-3 border-t border-slate-100/50 mt-4">
+                            @if(!empty($branch['wa_number']))
+                              <a href="https://wa.me/{{ $branchWaClean }}" target="_blank" rel="noopener noreferrer" 
+                                 class="flex-1 min-w-[100px] bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-3 py-2.5 rounded-xl transition-all text-center flex items-center justify-center gap-1.5 shadow-sm hover:shadow">
+                                <span>💬</span> WhatsApp
+                              </a>
+                            @endif
+                            @php
+                              $resolvedMapUrl = !empty($branch['maps_embed_url']) && str_contains($branch['maps_embed_url'], 'embed')
+                                ? $branch['maps_embed_url']
+                                : (!empty($branch['address']) ? "https://maps.google.com/maps?q=" . urlencode($branch['name'] . ' ' . $branch['address']) . "&t=&z=15&ie=UTF8&iwloc=&output=embed" : $mapsEmbedUrl);
+                            @endphp
+                            <button type="button" 
+                                    onclick="changeActiveMap('{{ $resolvedMapUrl }}', '{{ addslashes($branch['name']) }}')"
+                                    class="flex-1 min-w-[100px] bg-white border border-slate-200 hover:border-emerald-500 hover:text-emerald-700 text-gray-700 font-bold text-xs px-3 py-2.5 rounded-xl transition-all text-center flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
+                              <span>🗺️</span> Lihat Peta
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    @endforeach
+                  </div>
+                  {{-- Pagination --}}
+                  <div class="swiper-pagination branch-swiper-pagination !bottom-0"></div>
+                </div>
+
+                {{-- Other General Info --}}
+                <div class="grid grid-cols-2 gap-3 pt-3">
+                  <div class="flex items-start gap-3 bg-slate-50 rounded-2xl p-4 border border-slate-100">
+                    <div class="w-9 h-9 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0 text-lg">
+                      🛵
+                    </div>
+                    <div class="min-w-0">
+                      <div class="font-extrabold text-emerald-950 text-xs mb-0.5">Pengiriman</div>
+                      <div class="text-gray-600 font-semibold text-3xs leading-snug line-clamp-3">{!! nl2br(e($shippingInfo)) !!}</div>
+                    </div>
+                  </div>
+
+                  <div class="flex items-start gap-3 bg-slate-50 rounded-2xl p-4 border border-slate-100">
+                    <div class="w-9 h-9 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0 text-lg">
+                      🕐
+                    </div>
+                    <div class="min-w-0">
+                      <div class="font-extrabold text-emerald-950 text-xs mb-0.5">Operasional</div>
+                      <div class="text-gray-600 font-semibold text-3xs leading-snug line-clamp-3">{{ $hoursVal }}</div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            <div class="flex items-start gap-4 bg-slate-50 rounded-2xl p-5 border border-slate-100">
-              <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                <span class="text-2xl">🛵</span>
-              </div>
-              <div>
-                <div class="font-extrabold text-emerald-950 text-base mb-1">Layanan Pengiriman</div>
-                <div class="text-gray-600 font-medium text-sm leading-relaxed">{!! nl2br(e($shippingInfo)) !!}</div>
-              </div>
-            </div>
-
-            <div class="flex items-start gap-4 bg-slate-50 rounded-2xl p-5 border border-slate-100">
-              <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                <span class="text-2xl">🕐</span>
-              </div>
-              <div>
-                <div class="font-extrabold text-emerald-950 text-base mb-1">Jam Operasional</div>
-                <div class="text-gray-600 font-medium text-sm leading-relaxed">
-                  {{ $hoursVal }}
-                  <br/><span class="text-red-500 font-semibold text-xs mt-1 block">Minggu: Libur (Pelayanan Online Saja)</span>
+            @else
+              {{-- Fallback: Old Layout for single address --}}
+              <div class="flex items-start gap-4 bg-slate-50 rounded-2xl p-5 border border-slate-100">
+                <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <span class="text-2xl">📍</span>
+                </div>
+                <div>
+                  <div class="font-extrabold text-emerald-950 text-base mb-1">Alamat Toko</div>
+                  <div class="text-gray-600 font-medium text-sm leading-relaxed">{!! nl2br(e($addressVal)) !!}</div>
                 </div>
               </div>
-            </div>
+
+              <div class="flex items-start gap-4 bg-slate-50 rounded-2xl p-5 border border-slate-100">
+                <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <span class="text-2xl">📱</span>
+                </div>
+                <div>
+                  <div class="font-extrabold text-emerald-950 text-base mb-1">WhatsApp / Telepon</div>
+                  <div class="text-gray-600 font-medium text-sm leading-relaxed">
+                    <a href="https://wa.me/{{ $waNumClean }}" class="text-emerald-700 font-bold hover:text-emerald-900 transition-colors">+{{ $settings['wa_number'] ?? '6281234567890' }}</a>
+                    <br/><span class="text-gray-400 text-xs">Senin – Sabtu: 08.00 – 20.00 WIB</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-4 bg-slate-50 rounded-2xl p-5 border border-slate-100">
+                <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <span class="text-2xl">🛵</span>
+                </div>
+                <div>
+                  <div class="font-extrabold text-emerald-950 text-base mb-1">Layanan Pengiriman</div>
+                  <div class="text-gray-600 font-medium text-sm leading-relaxed">{!! nl2br(e($shippingInfo)) !!}</div>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-4 bg-slate-50 rounded-2xl p-5 border border-slate-100">
+                <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <span class="text-2xl">🕐</span>
+                </div>
+                <div>
+                  <div class="font-extrabold text-emerald-950 text-base mb-1">Jam Operasional</div>
+                  <div class="text-gray-600 font-medium text-sm leading-relaxed">
+                    {{ $hoursVal }}
+                    <br/><span class="text-red-500 font-semibold text-xs mt-1 block">Minggu: Libur (Pelayanan Online Saja)</span>
+                  </div>
+                </div>
+              </div>
+            @endif
           </div>
 
           {{-- Right Column: Beautiful Contact Form (col-span-7) --}}
-          <div class="lg:col-span-7 reveal" style="transition-delay: 0.2s">
+          <div class="lg:col-span-7 reveal-slide-left" style="transition-delay: 0.15s">
             <form action="{{ route('contact.store') }}#kontak" method="POST" class="bg-gradient-to-br from-emerald-50 to-white border border-emerald-100 rounded-3xl p-6 sm:p-8 space-y-4 shadow-sm">
               @csrf
               <h3 class="font-extrabold text-emerald-950 text-lg mb-2">Form Hubungi Kami</h3>
@@ -727,19 +1022,21 @@
         <div class="reveal">
           <div class="rounded-3xl overflow-hidden shadow-xl border border-slate-200 aspect-[16/9] md:aspect-[21/9] bg-slate-100 min-h-[350px]">
             <iframe
-              src="{{ $mapsEmbedUrl }}"
+              id="active-store-map"
+              src="{{ !empty($branches) ? (!empty($branches[0]['maps_embed_url']) && str_contains($branches[0]['maps_embed_url'], 'embed') ? $branches[0]['maps_embed_url'] : (!empty($branches[0]['address']) ? 'https://maps.google.com/maps?q=' . urlencode($branches[0]['name'] . ' ' . $branches[0]['address']) . '&t=&z=15&ie=UTF8&iwloc=&output=embed' : $mapsEmbedUrl)) : $mapsEmbedUrl }}"
               width="100%"
               height="100%"
               style="border:0;"
               allowfullscreen=""
               loading="lazy"
               referrerpolicy="no-referrer-when-downgrade"
-              title="Lokasi {{ $storeName }}"
+              title="Lokasi {{ !empty($branches) ? $branches[0]['name'] : $storeName }}"
             ></iframe>
           </div>
           <div class="mt-4 text-center">
             <a
-              href="https://maps.google.com/?q=Cianjur,+West+Java,+Indonesia"
+              id="active-store-map-link"
+              href="https://www.google.com/maps/search/?api=1&query={{ urlencode(!empty($branches) ? $branches[0]['name'] : $storeName) }}"
               target="_blank"
               rel="noopener noreferrer"
               class="inline-flex items-center gap-2 text-emerald-700 hover:text-emerald-900 font-bold text-sm transition-colors"
@@ -747,7 +1044,7 @@
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
               </svg>
-              Buka di Google Maps
+              <span id="active-store-map-text">Buka di Google Maps ({{ !empty($branches) ? $branches[0]['name'] : $storeName }})</span>
             </a>
           </div>
         </div>
@@ -766,13 +1063,19 @@
         {{-- Brand --}}
         <div class="sm:col-span-2 lg:col-span-1">
           <div class="flex items-center gap-2.5 mb-4">
-            <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-xl flex items-center justify-center">
-              <span class="text-emerald-950 font-black text-xl">🌴</span>
-            </div>
-            <div>
-              <div class="font-extrabold text-white text-base leading-tight">{{ $storeName }}</div>
-              <div class="text-yellow-400 font-semibold text-xs">Cianjur · Est. 2015</div>
-            </div>
+            @if(!empty($settings['store_logo']))
+              <div class="inline-flex items-center justify-center h-12 px-3.5 bg-white border border-gray-100 rounded-xl shadow-sm mb-0.5">
+                <img src="{{ $settings['store_logo'] }}" alt="{{ $storeName }}" class="h-9 w-auto object-contain">
+              </div>
+            @else
+              <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-xl flex items-center justify-center">
+                <span class="text-emerald-950 font-black text-xl">🌴</span>
+              </div>
+              <div>
+                <div class="font-extrabold text-white text-base leading-tight">{{ $storeName }}</div>
+                <div class="text-yellow-400 font-semibold text-xs">Cianjur · Est. 2015</div>
+              </div>
+            @endif
           </div>
           <p class="text-white/60 text-sm font-medium leading-relaxed mb-5">
             Menghadirkan kurma impor berkualitas terbaik dengan harga terjangkau. Terpercaya, higienis, dan selalu fresh.
@@ -803,13 +1106,18 @@
           </ul>
         </div>
 
-        {{-- Products --}}
         <div>
           <h4 class="font-extrabold text-white text-sm uppercase tracking-wider mb-4">Varian Favorit</h4>
           <ul class="space-y-2.5">
-            @foreach(['Kurma Sukari Premium', 'Kurma Medjool Jumbo', 'Kurma Ajwa Madinah', 'Kurma Deglet Nour', 'Hampers Kurma Mix'] as $p)
-              <li><span class="text-white/60 font-medium text-sm">{{ $p }}</span></li>
-            @endforeach
+            @if(!empty($products) && count($products) > 0)
+              @foreach($products->take(5) as $product)
+                <li><a href="#produk" class="text-white/60 hover:text-yellow-400 font-medium text-sm transition-colors">{{ $product->name }}</a></li>
+              @endforeach
+            @else
+              @foreach(['Kurma Sukari Premium', 'Kurma Medjool Jumbo', 'Kurma Ajwa Madinah', 'Kurma Deglet Nour', 'Hampers Kurma Mix'] as $p)
+                <li><span class="text-white/60 font-medium text-sm">{{ $p }}</span></li>
+              @endforeach
+            @endif
           </ul>
         </div>
 
@@ -865,6 +1173,9 @@
     <span class="text-sm hidden sm:block">Chat Sekarang</span>
   </a>
 
+  <!-- Swiper JS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
   {{-- ============================================================
        JAVASCRIPT
   ============================================================ --}}
@@ -896,13 +1207,16 @@
       if (!btn.contains(e.target) && !menu.contains(e.target)) closeMenu();
     });
 
-    // Scroll reveal
-    const revealObserver = new IntersectionObserver((entries) => {
+    // Modern Scroll Reveal Observer
+    const revealObserver = new IntersectionObserver((entries, observer) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('visible');
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target); // Unobserve to lock state and optimize browser performance
+        }
       });
-    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+    }, { threshold: 0.05, rootMargin: '0px 0px -80px 0px' });
+    document.querySelectorAll('.reveal, [class*="reveal-"]').forEach(el => revealObserver.observe(el));
 
     // Active nav highlight
     const sections  = document.querySelectorAll('section[id]');
@@ -933,6 +1247,86 @@
         }
       });
     });
+
+    // Initialize Swiper for Product Catalog
+    const productSwiper = new Swiper('.productSwiper', {
+      slidesPerView: 1,
+      spaceBetween: 24,
+      grabCursor: true,
+      loop: {{ count($products) > 3 ? 'true' : 'false' }},
+      speed: 1000, /* Slower, highly luxurious weighted slide transitions */
+      watchSlidesProgress: true,
+      parallax: true,
+      keyboard: {
+        enabled: true,
+        onlyInViewport: true,
+      },
+      mousewheel: {
+        forceToAxis: true,
+      },
+      autoplay: {
+        delay: 5000,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-next-btn',
+        prevEl: '.swiper-prev-btn',
+      },
+      breakpoints: {
+        640: {
+          slidesPerView: 2,
+          spaceBetween: 24,
+        },
+        1024: {
+          slidesPerView: 3,
+          spaceBetween: 30,
+        }
+      }
+    });
+
+    // Initialize Swiper for Branch Locations
+    const branchSwiper = new Swiper('.branchSwiper', {
+      slidesPerView: 1,
+      spaceBetween: 16,
+      grabCursor: true,
+      pagination: {
+        el: '.branch-swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.branch-next-btn',
+        prevEl: '.branch-prev-btn',
+      },
+    });
+
+    // Change Active Map for branches
+    window.changeActiveMap = function(embedUrl, name) {
+      const mapFrame = document.getElementById('active-store-map');
+      const mapLink = document.getElementById('active-store-map-link');
+      const mapText = document.getElementById('active-store-map-text');
+      
+      if (mapFrame) {
+        mapFrame.src = embedUrl;
+        mapFrame.title = "Lokasi " + name;
+      }
+      if (mapText) {
+        mapText.textContent = "Buka di Google Maps (" + name + ")";
+      }
+      if (mapLink) {
+        mapLink.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(name);
+      }
+      
+      // Smooth scroll to map frame
+      const mapContainer = mapFrame.closest('.reveal');
+      if (mapContainer) {
+        mapContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    };
   </script>
 
 </body>
