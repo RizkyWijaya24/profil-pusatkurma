@@ -16,6 +16,15 @@ class AppServiceProvider extends ServiceProvider
         if (basename($parentDir) === 'public_html' || (str_contains($parentDir, 'public_html') && file_exists($parentDir . '/index.php'))) {
             $this->app->usePublicPath($parentDir);
         }
+
+        // Dynamically fix malformed APP_URL (e.g. missing // in https:domain.com)
+        $appUrl = config('app.url');
+        if (!empty($appUrl)) {
+            if (preg_match('/^(https?):(?!\/\/)/i', $appUrl)) {
+                $fixedUrl = preg_replace('/^(https?):/i', '$1://', $appUrl);
+                config(['app.url' => $fixedUrl]);
+            }
+        }
     }
 
     /**

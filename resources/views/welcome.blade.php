@@ -288,7 +288,12 @@
      */
     $toImageUrl = function($path, $default = '') use (&$toImageUrl) {
         if (empty($path)) return $default;
-        if (preg_match('/^https?:\/\//i', $path)) return $path; // sudah URL lengkap
+        if (preg_match('/^https?:/i', $path)) {
+            if (!preg_match('/^https?:\/\//i', $path)) {
+                return preg_replace('/^(https?):/i', '$1://', $path);
+            }
+            return $path;
+        }
         return asset($path); // path relatif, perlu asset()
     };
 

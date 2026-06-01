@@ -23,7 +23,10 @@ class Setting extends Model
             }
 
             // If it is already a valid absolute URL (like unsplash or external), return as-is
-            if (preg_match('/^https?:\/\//i', $value)) {
+            if (preg_match('/^https?:/i', $value)) {
+                if (!preg_match('/^https?:\/\//i', $value)) {
+                    return preg_replace('/^(https?):/i', '$1://', $value);
+                }
                 return $value;
             }
 
