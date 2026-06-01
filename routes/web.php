@@ -21,6 +21,17 @@ Route::get('/clear-cache', function() {
     return "All Laravel cache cleared successfully!";
 });
 
+Route::get('/check-files', function() {
+    $paths = [
+        'public_path' => public_path(),
+        'base_path' => base_path(),
+        'uploads_settings_dir_exists' => is_dir(public_path('uploads/settings')),
+        'logo_file_path' => public_path('uploads/settings/logo_1780111769.png'),
+        'logo_file_exists' => file_exists(public_path('uploads/settings/logo_1780111769.png')),
+    ];
+    return response()->json($paths);
+});
+
 // ─── ADMIN AUTH ──────────────────────────────────────────────────
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
