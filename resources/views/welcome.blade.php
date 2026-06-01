@@ -284,9 +284,13 @@
     $heroBgImage = $settings['hero_bg_image'] ?? 'https://images.unsplash.com/photo-1571680322279-a226e6a4cc2a?w=1600&q=80&auto=format&fit=crop';
     $shippingInfo = $settings['shipping_info'] ?? 'Antar gratis area Cianjur kota (min. order 500g). Pengiriman seluruh Indonesia via JNE, J&T, SiCepat.';
     $mapsEmbedUrlRaw = $settings['maps_embed_url'] ?? '';
+    // Gunakan URL embed yang benar agar tidak memicu notifikasi "open another application"
+    // maps.google.com/maps?output=embed adalah format LAMA yang bermasalah
+    // Format yang aman: google.com/maps/embed?pb=...
+    $defaultSafeMapsEmbed = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15837.356714929936!2d107.13403!3d-6.82185!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68a96e1b5a9cf9%3A0x20e0d4987d91a09c!2sCianjur%2C%20West%20Java!5e0!3m2!1sen!2sid!4v1680000000000!5m2!1sen!2sid";
     $mapsEmbedUrl = !empty($mapsEmbedUrlRaw) && str_contains($mapsEmbedUrlRaw, 'embed')
       ? $mapsEmbedUrlRaw
-      : (!empty($addressVal) ? "https://maps.google.com/maps?q=" . urlencode($storeName . ' ' . $addressVal) . "&t=&z=15&ie=UTF8&iwloc=&output=embed" : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15837.356714929936!2d107.13403!3d-6.82185!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68a96e1b5a9cf9%3A0x20e0d4987d91a09c!2sCianjur%2C%20West%20Java!5e0!3m2!1sen!2sid!4v1680000000000!5m2!1sen!2sid");
+      : $defaultSafeMapsEmbed;
     $branches = json_decode($settings['branches'] ?? '[]', true);
     
     // Stats
@@ -879,9 +883,10 @@
                               </a>
                             @endif
                             @php
+                              // Gunakan format embed yang aman, hindari maps.google.com/maps?output=embed
                               $resolvedMapUrl = !empty($branch['maps_embed_url']) && str_contains($branch['maps_embed_url'], 'embed')
                                 ? $branch['maps_embed_url']
-                                : (!empty($branch['address']) ? "https://maps.google.com/maps?q=" . urlencode($branch['name'] . ' ' . $branch['address']) . "&t=&z=15&ie=UTF8&iwloc=&output=embed" : $mapsEmbedUrl);
+                                : $mapsEmbedUrl;
                             @endphp
                             <button type="button" 
                                     onclick="changeActiveMap('{{ $resolvedMapUrl }}', '{{ addslashes($branch['name']) }}')"
@@ -1021,9 +1026,20 @@
         {{-- Map Full Width --}}
         <div class="reveal">
           <div class="rounded-3xl overflow-hidden shadow-xl border border-slate-200 aspect-[16/9] md:aspect-[21/9] bg-slate-100 min-h-[350px]">
+            @php
+              // Tentukan src maps yang aman untuk iframe awal
+              $initialMapSrc = $mapsEmbedUrl; // default safe fallback
+              if (!empty($branches) && !empty($branches[0])) {
+                $b0 = $branches[0];
+                if (!empty($b0['maps_embed_url']) && str_contains($b0['maps_embed_url'], 'embed')) {
+                  $initialMapSrc = $b0['maps_embed_url'];
+                }
+                // Jika tidak ada maps_embed_url yang valid, gunakan $mapsEmbedUrl (yang sudah aman)
+              }
+            @endphp
             <iframe
               id="active-store-map"
-              src="{{ !empty($branches) ? (!empty($branches[0]['maps_embed_url']) && str_contains($branches[0]['maps_embed_url'], 'embed') ? $branches[0]['maps_embed_url'] : (!empty($branches[0]['address']) ? 'https://maps.google.com/maps?q=' . urlencode($branches[0]['name'] . ' ' . $branches[0]['address']) . '&t=&z=15&ie=UTF8&iwloc=&output=embed' : $mapsEmbedUrl)) : $mapsEmbedUrl }}"
+              src="{{ $initialMapSrc }}"
               width="100%"
               height="100%"
               style="border:0;"
