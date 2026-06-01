@@ -8,9 +8,6 @@ class Setting extends Model
 {
     protected $fillable = ['key', 'value'];
 
-    /**
-     * Get the setting's value with dynamic local domain cleanup and asset wrapping.
-     */
     public function getValueAttribute($value)
     {
         if (empty($value)) {
@@ -20,22 +17,18 @@ class Setting extends Model
         // Apply dynamic domain resolver only for image/logo keys
         $imageKeys = ['store_logo', 'hero_bg_image', 'about_image'];
         if (in_array($this->key, $imageKeys)) {
-            $localPatterns = [
-                '/^https?:\/\/localhost(:\d+)?\//i',
-                '/^https?:\/\/127\.0\.0\.1(:\d+)?\//i'
-            ];
-
-            foreach ($localPatterns as $pattern) {
-                if (preg_match($pattern, $value)) {
-                    $relativePath = preg_replace($pattern, '', $value);
-                    return asset($relativePath);
-                }
+            // Extract the exact relative path if it contains uploads/settings/ or uploads/products/
+            if (preg_match('/uploads\/(settings|products)\/.+$/i', $value, $matches)) {
+                return asset($matches[0]);
             }
 
-            // If it is a relative path, wrap it in asset() dynamically
-            if (!preg_match('/^https?:\/\//i', $value)) {
-                return asset($value);
+            // If it is already a valid absolute URL (like unsplash or external), return as-is
+            if (preg_match('/^https?:\/\//i', $value)) {
+                return $value;
             }
+
+            // Fallback for custom relative paths
+            return asset($value);
         }
 
         return $value;

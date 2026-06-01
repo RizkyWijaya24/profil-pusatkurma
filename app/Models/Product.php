@@ -17,33 +17,24 @@ class Product extends Model
         'is_active'   => 'boolean',
     ];
 
-    /**
-     * Get the product's image URL with dynamic local domain cleanup and asset wrapping.
-     */
     public function getImageUrlAttribute($value)
     {
         if (empty($value)) {
             return $value;
         }
 
-        $localPatterns = [
-            '/^https?:\/\/localhost(:\d+)?\//i',
-            '/^https?:\/\/127\.0\.0\.1(:\d+)?\//i'
-        ];
-
-        foreach ($localPatterns as $pattern) {
-            if (preg_match($pattern, $value)) {
-                $relativePath = preg_replace($pattern, '', $value);
-                return asset($relativePath);
-            }
+        // Extract the exact relative path if it contains uploads/products/ or uploads/settings/
+        if (preg_match('/uploads\/(products|settings)\/.+$/i', $value, $matches)) {
+            return asset($matches[0]);
         }
 
-        // If it is a relative path (not starting with http:// or https://), wrap it in asset()
-        if (!preg_match('/^https?:\/\//i', $value)) {
-            return asset($value);
+        // If it is already a valid absolute URL (like unsplash or external), return as-is
+        if (preg_match('/^https?:\/\//i', $value)) {
+            return $value;
         }
 
-        return $value;
+        // Fallback for custom relative paths
+        return asset($value);
     }
 
     public function scopeActive($query)
