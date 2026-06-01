@@ -434,7 +434,7 @@
           <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <a
               id="cta-hero-order"
-              href="https://wa.me/{{ $waNumClean }}?text=Halo%20Admin%20{{ urlencode($storeName) }}%2C%20saya%20ingin%20mengetahui%20produk%20dan%20harga%20kurma%20premium%20yang%20tersedia.%20Mohon%20infonya%20ya%20kak%20%F0%9F%99%8F"
+              href="https://api.whatsapp.com/send?phone={{ $waNumClean }}&amp;text=Halo%20Admin%20{{ urlencode($storeName) }}%2C%20saya%20ingin%20mengetahui%20produk%20dan%20harga%20kurma%20premium%20yang%20tersedia.%20Mohon%20infonya%20ya%20kak%20%F0%9F%99%8F"
               target="_blank"
               rel="noopener noreferrer"
               class="wa-float inline-flex items-center justify-center gap-2.5 bg-yellow-500 hover:bg-yellow-400 text-emerald-950 font-extrabold text-base sm:text-lg px-7 py-4 rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105 min-h-[52px]"
@@ -681,7 +681,7 @@
                       </div>
                       <a
                         id="btn-beli-{{ $product->id }}"
-                        href="https://wa.me/{{ $waNumClean }}?text={{ $product->wa_text ?? 'Halo%20Admin%20Pusat%20Kurma%2C%20saya%20tertarik%20dengan%20produk%20' . urlencode($product->name) }}"
+                        href="https://api.whatsapp.com/send?phone={{ $waNumClean }}&amp;text={{ $product->wa_text ?? 'Halo%20Admin%20Pusat%20Kurma%2C%20saya%20tertarik%20dengan%20produk%20' . urlencode($product->name) }}"
                         target="_blank"
                         rel="noopener noreferrer"
                         class="btn-premium-wa flex items-center justify-center gap-2 {{ $product->btn_class ?? 'bg-emerald-900 hover:bg-emerald-800 text-white' }} font-bold text-sm px-4 py-3.5 rounded-xl w-full transition-all duration-200 hover:shadow-lg min-h-[48px]"
@@ -723,7 +723,7 @@
         <div class="text-center mt-12 reveal">
           <p class="text-gray-500 font-medium mb-4">Masih banyak varian lainnya yang tersedia!</p>
           <a
-            href="https://wa.me/{{ $waNumClean }}?text=Halo%20Admin%20{{ urlencode($storeName) }}%2C%20saya%20ingin%20melihat%20katalog%20lengkap%20produk%20kurma%20yang%20tersedia.%20Mohon%20kirimkan%20daftar%20harganya%20ya%20kak%20%F0%9F%99%8F"
+            href="https://api.whatsapp.com/send?phone={{ $waNumClean }}&amp;text=Halo%20Admin%20{{ urlencode($storeName) }}%2C%20saya%20ingin%20melihat%20katalog%20lengkap%20produk%20kurma%20yang%20tersedia.%20Mohon%20kirimkan%20daftar%20harganya%20ya%20kak%20%F0%9F%99%8F"
             target="_blank"
             rel="noopener noreferrer"
             class="inline-flex items-center gap-2 border-2 border-emerald-900 text-emerald-900 hover:bg-emerald-900 hover:text-white font-bold text-base px-8 py-3.5 rounded-2xl transition-all duration-300 min-h-[52px]"
@@ -796,7 +796,7 @@
         @endif
         <a
           id="cta-banner-wa"
-          href="https://wa.me/{{ $waNumClean }}?text=Halo%20Admin%20{{ urlencode($storeName) }}%21%20Saya%20ingin%20order%20kurma%20premium.%20Mohon%20bantu%20rekomendasikan%20produk%20yang%20cocok%20%F0%9F%99%8F"
+          href="https://api.whatsapp.com/send?phone={{ $waNumClean }}&amp;text=Halo%20Admin%20{{ urlencode($storeName) }}%21%20Saya%20ingin%20order%20kurma%20premium.%20Mohon%20bantu%20rekomendasikan%20produk%20yang%20cocok%20%F0%9F%99%8F"
           target="_blank"
           rel="noopener noreferrer"
           class="inline-flex items-center gap-3 bg-emerald-900 hover:bg-emerald-800 text-white font-extrabold text-lg px-10 py-5 rounded-2xl shadow-xl hover:shadow-emerald-900/10 transition-all duration-300 hover:scale-105 min-h-[60px]"
@@ -873,7 +873,7 @@
 
                           <div class="flex flex-wrap gap-2 pt-3 border-t border-slate-100/50 mt-4">
                             @if(!empty($branch['wa_number']))
-                              <a href="https://wa.me/{{ $branchWaClean }}" target="_blank" rel="noopener noreferrer" 
+                              <a href="https://api.whatsapp.com/send?phone={{ $branchWaClean }}" target="_blank" rel="noopener noreferrer" 
                                  class="flex-1 min-w-[100px] bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-3 py-2.5 rounded-xl transition-all text-center flex items-center justify-center gap-1.5 shadow-sm hover:shadow">
                                 <span>💬</span> WhatsApp
                               </a>
@@ -939,7 +939,7 @@
                 <div>
                   <div class="font-extrabold text-emerald-950 text-base mb-1">WhatsApp / Telepon</div>
                   <div class="text-gray-600 font-medium text-sm leading-relaxed">
-                    <a href="https://wa.me/{{ $waNumClean }}" class="text-emerald-700 font-bold hover:text-emerald-900 transition-colors">+{{ $settings['wa_number'] ?? '6281234567890' }}</a>
+                    <a href="https://api.whatsapp.com/send?phone={{ $waNumClean }}" target="_blank" rel="noopener noreferrer" class="text-emerald-700 font-bold hover:text-emerald-900 transition-colors">+{{ $settings['wa_number'] ?? '6281234567890' }}</a>
                     <br/><span class="text-gray-400 text-xs">Senin – Sabtu: 08.00 – 20.00 WIB</span>
                   </div>
                 </div>
@@ -1081,7 +1081,7 @@
             Menghadirkan kurma impor berkualitas terbaik dengan harga terjangkau. Terpercaya, higienis, dan selalu fresh.
           </p>
           <div class="flex gap-3">
-            <a href="https://wa.me/{{ $waNumClean }}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"
+            <a href="https://api.whatsapp.com/send?phone={{ $waNumClean }}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"
                class="w-9 h-9 bg-white/10 hover:bg-green-500 rounded-lg flex items-center justify-center transition-colors duration-200">
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
             </a>
@@ -1131,7 +1131,7 @@
             </li>
             <li class="flex items-center gap-2">
               <span class="text-yellow-400 flex-shrink-0">📱</span>
-              <a href="https://wa.me/{{ $waNumClean }}" class="text-white/60 hover:text-yellow-400 font-medium text-sm transition-colors">+{{ $settings['wa_number'] ?? '6281234567890' }}</a>
+              <a href="https://api.whatsapp.com/send?phone={{ $waNumClean }}" target="_blank" rel="noopener noreferrer" class="text-white/60 hover:text-yellow-400 font-medium text-sm transition-colors">+{{ $settings['wa_number'] ?? '6281234567890' }}</a>
             </li>
             <li class="flex items-center gap-2">
               <span class="text-yellow-400 flex-shrink-0">🕐</span>
@@ -1161,7 +1161,7 @@
   ============================================================ --}}
   <a
     id="wa-float-btn"
-    href="https://wa.me/{{ $waNumClean }}?text=Halo%20Admin%20{{ urlencode($storeName) }}%21%20Saya%20ingin%20bertanya%20tentang%20produk%20kurma%20yang%20tersedia.%20Bisa%20bantu%20saya%3F%20%F0%9F%99%8F"
+    href="https://api.whatsapp.com/send?phone={{ $waNumClean }}&amp;text=Halo%20Admin%20{{ urlencode($storeName) }}%21%20Saya%20ingin%20bertanya%20tentang%20produk%20kurma%20yang%20tersedia.%20Bisa%20bantu%20saya%3F%20%F0%9F%99%8F"
     target="_blank"
     rel="noopener noreferrer"
     aria-label="Chat WhatsApp"

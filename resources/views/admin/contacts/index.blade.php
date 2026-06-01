@@ -37,7 +37,7 @@
             </td>
             <td class="px-5 py-4 text-gray-500 hidden md:table-cell">
               @if($contact->phone)
-                <a href="https://wa.me/{{ preg_replace('/\D/', '', $contact->phone) }}" target="_blank"
+                <a href="https://api.whatsapp.com/send?phone={{ preg_replace('/\D/', '', $contact->phone) }}" target="_blank" rel="noopener noreferrer"
                    class="text-emerald-700 hover:underline font-medium">{{ $contact->phone }}</a>
               @else
                 <span class="text-gray-300">—</span>

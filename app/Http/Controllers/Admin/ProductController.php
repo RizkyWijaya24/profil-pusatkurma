@@ -48,7 +48,7 @@ class ProductController extends Controller
             $file = $request->file('image');
             $filename = 'product_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('uploads/products'), $filename);
-            $validated['image_url'] = asset('uploads/products/' . $filename);
+            $validated['image_url'] = 'uploads/products/' . $filename;
         }
 
         unset($validated['image']);
@@ -93,7 +93,7 @@ class ProductController extends Controller
             $file = $request->file('image');
             $filename = 'product_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('uploads/products'), $filename);
-            $validated['image_url'] = asset('uploads/products/' . $filename);
+            $validated['image_url'] = 'uploads/products/' . $filename;
         } elseif (!empty($validated['image_url'])) {
             // If they provided a new URL different from old one, delete old local file
             if ($validated['image_url'] !== $product->image_url) {

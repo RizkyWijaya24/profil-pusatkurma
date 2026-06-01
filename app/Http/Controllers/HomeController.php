@@ -12,7 +12,7 @@ class HomeController extends Controller
     {
         $products     = Product::active()->get();
         $testimonials = Testimonial::active()->get();
-        $settings     = Setting::pluck('value', 'key');
+        $settings     = Setting::all()->pluck('value', 'key');
 
         return view('welcome', compact('products', 'testimonials', 'settings'));
     }

@@ -10,7 +10,7 @@ class SettingController extends Controller
 {
     public function index()
     {
-        $settings = Setting::pluck('value', 'key');
+        $settings = Setting::all()->pluck('value', 'key');
         return view('admin.settings.index', compact('settings'));
     }
 
@@ -99,7 +99,7 @@ class SettingController extends Controller
             $file = $request->file('store_logo');
             $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('uploads/settings'), $filename);
-            $store_logo_url = asset('uploads/settings/' . $filename);
+            $store_logo_url = 'uploads/settings/' . $filename;
             Setting::set('store_logo', $store_logo_url);
         }
 
@@ -107,7 +107,7 @@ class SettingController extends Controller
             $file = $request->file('hero_bg_image');
             $filename = 'hero_bg_' . time() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('uploads/settings'), $filename);
-            $hero_bg_image_url = asset('uploads/settings/' . $filename);
+            $hero_bg_image_url = 'uploads/settings/' . $filename;
             Setting::set('hero_bg_image', $hero_bg_image_url);
         }
 
@@ -115,7 +115,7 @@ class SettingController extends Controller
             $file = $request->file('about_image');
             $filename = 'about_' . time() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('uploads/settings'), $filename);
-            $about_image_url = asset('uploads/settings/' . $filename);
+            $about_image_url = 'uploads/settings/' . $filename;
             Setting::set('about_image', $about_image_url);
         }
 
