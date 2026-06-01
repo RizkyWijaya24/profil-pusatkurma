@@ -280,8 +280,28 @@
     $firstWord = $words[0] ?? 'Pusat';
     $secondWord = implode(' ', array_slice($words, 1));
 
+    /**
+     * Helper: konversi path gambar (dari settings DB) menjadi URL yang benar.
+     * - Jika sudah URL lengkap (http/https) → langsung kembalikan
+     * - Jika path relatif (uploads/...) → gunakan asset()
+     * Ini mencegah double-asset() problem.
+     */
+    $toImageUrl = function($path, $default = '') use (&$toImageUrl) {
+        if (empty($path)) return $default;
+        if (preg_match('/^https?:\/\//i', $path)) return $path; // sudah URL lengkap
+        return asset($path); // path relatif, perlu asset()
+    };
+
     // Dynamic additions
-    $heroBgImage = $settings['hero_bg_image'] ?? 'https://images.unsplash.com/photo-1571680322279-a226e6a4cc2a?w=1600&q=80&auto=format&fit=crop';
+    $heroBgImage = $toImageUrl(
+        $settings['hero_bg_image'] ?? '',
+        'https://images.unsplash.com/photo-1571680322279-a226e6a4cc2a?w=1600&q=80&auto=format&fit=crop'
+    );
+    $aboutImage = $toImageUrl(
+        $settings['about_image'] ?? '',
+        'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&q=80&auto=format&fit=crop'
+    );
+    $storeLogo = $toImageUrl($settings['store_logo'] ?? '');
     $shippingInfo = $settings['shipping_info'] ?? 'Antar gratis area Cianjur kota (min. order 500g). Pengiriman seluruh Indonesia via JNE, J&T, SiCepat.';
     $mapsEmbedUrlRaw = $settings['maps_embed_url'] ?? '';
     // Gunakan URL embed yang benar agar tidak memicu notifikasi "open another application"
@@ -304,7 +324,7 @@
     // About Details
     $aboutHeadline = $settings['about_headline'] ?? 'Kepercayaan yang Dibangun Sejak Puluhan Tahun';
     $aboutSub = $settings['about_sub'] ?? 'Kami bukan sekadar toko kurma. Kami adalah mitra Anda dalam menghadirkan kelezatan, kebaikan, dan keberkahan dari buah terbaik bumi Allah.';
-    $aboutImage = $settings['about_image'] ?? 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&q=80&auto=format&fit=crop';
+    // $aboutImage sudah disiapkan oleh $toImageUrl helper di atas (aman dari double asset())
     $aboutTitleDetail = $settings['about_title_detail'] ?? 'Menghadirkan Kurma Terbaik Langsung ke Tangan Anda';
     $aboutDesc1 = $settings['about_desc_1'] ?? 'Pusat Kurma Premium Cianjur berkomitmen menghadirkan kurma impor berkualitas tinggi...';
     $aboutDesc2 = $settings['about_desc_2'] ?? 'Berlokasi strategis di Cianjur, kami melayani pembelian eceran maupun grosir...';
@@ -336,9 +356,9 @@
 
         {{-- Logo --}}
         <a href="#beranda" class="flex items-center gap-2.5 group">
-          @if(!empty($settings['store_logo']))
+          @if(!empty($storeLogo))
             <div class="flex items-center justify-center h-11 px-3 bg-white border border-gray-100 rounded-xl shadow-sm transition-all duration-300 group-hover:scale-[1.03] group-hover:shadow-md">
-              <img src="{{ asset($settings['store_logo']) }}" alt="{{ $storeName }}" class="h-8 w-auto object-contain transition-transform duration-300" style="image-rendering: -webkit-optimize-contrast;">
+              <img src="{{ $storeLogo }}" alt="{{ $storeName }}" class="h-8 w-auto object-contain transition-transform duration-300" style="image-rendering: -webkit-optimize-contrast;">
             </div>
           @else
             <div class="w-9 h-9 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
@@ -401,7 +421,7 @@
       {{-- Background Image --}}
       <div class="absolute inset-0 z-0">
         <img
-          src="{{ asset($heroBgImage) }}"
+          src="{{ $heroBgImage }}"
           alt="Kurma Premium berkualitas tinggi"
           class="w-full h-full object-cover object-center"
           loading="eager"
@@ -529,7 +549,7 @@
           <div class="lg:col-span-5 relative reveal-slide-right w-full max-w-md sm:max-w-lg lg:max-w-none mx-auto">
             <div class="relative rounded-3xl overflow-hidden shadow-2xl aspect-[3/2]">
               <img
-                src="{{ asset($aboutImage) }}"
+                src="{{ $aboutImage }}"
                 alt="Tampilan Dalam Toko"
                 class="w-full h-full object-cover"
                 loading="lazy"
@@ -643,7 +663,7 @@
                     <div>
                       <div class="relative overflow-hidden aspect-[4/3] flex-shrink-0">
                         <img
-                          src="{{ asset($product->image_url) }}"
+                          src="{{ $product->image_url }}"
                           alt="{{ $product->name }}"
                           class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                           loading="lazy"
@@ -1079,9 +1099,9 @@
         {{-- Brand --}}
         <div class="sm:col-span-2 lg:col-span-1">
           <div class="flex items-center gap-2.5 mb-4">
-            @if(!empty($settings['store_logo']))
+            @if(!empty($storeLogo))
               <div class="inline-flex items-center justify-center h-12 px-3.5 bg-white border border-gray-100 rounded-xl shadow-sm mb-0.5">
-                <img src="{{ asset($settings['store_logo']) }}" alt="{{ $storeName }}" class="h-9 w-auto object-contain">
+                <img src="{{ $storeLogo }}" alt="{{ $storeName }}" class="h-9 w-auto object-contain">
               </div>
             @else
               <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-xl flex items-center justify-center">
