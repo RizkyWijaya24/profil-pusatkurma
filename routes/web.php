@@ -22,12 +22,20 @@ Route::get('/clear-cache', function() {
 });
 
 Route::get('/check-files', function() {
+    $logoPath = \App\Models\Setting::where('key', 'store_logo')->value('value');
+    $heroBgPath = \App\Models\Setting::where('key', 'hero_bg_image')->value('value');
     $paths = [
         'public_path' => public_path(),
         'base_path' => base_path(),
         'uploads_settings_dir_exists' => is_dir(public_path('uploads/settings')),
-        'logo_file_path' => public_path('uploads/settings/logo_1780111769.png'),
-        'logo_file_exists' => file_exists(public_path('uploads/settings/logo_1780111769.png')),
+        'logo_raw_db_value' => $logoPath,
+        'logo_asset_url' => $logoPath ? asset($logoPath) : null,
+        'logo_file_exists' => $logoPath ? file_exists(public_path($logoPath)) : false,
+        'hero_bg_raw_db_value' => $heroBgPath,
+        'hero_bg_asset_url' => $heroBgPath ? asset($heroBgPath) : null,
+        'products_dir_exists' => is_dir(public_path('uploads/products')),
+        'products_files' => is_dir(public_path('uploads/products')) ? scandir(public_path('uploads/products')) : [],
+        'app_url_config' => config('app.url'),
     ];
     return response()->json($paths);
 });
