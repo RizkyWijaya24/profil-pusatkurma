@@ -89,7 +89,7 @@
 
       {{-- Image Preview Card --}}
       <div class="mt-3 rounded-xl overflow-hidden border border-gray-100 aspect-video bg-gray-50 flex items-center justify-center relative group">
-        <img id="img_preview" src="{{ $product->image_url ?? '' }}" alt="Preview"
+        <img id="img_preview" src="{{ ($product->image_url ?? '') ? asset($product->image_url) : '' }}" alt="Preview"
              class="w-full h-full object-cover {{ ($product->image_url ?? '') ? '' : 'hidden' }}"/>
         <span id="img_placeholder" class="{{ ($product->image_url ?? '') ? 'hidden' : '' }} text-gray-300 text-sm">Preview gambar</span>
       </div>

@@ -334,7 +334,7 @@
         <a href="#beranda" class="flex items-center gap-2.5 group">
           @if(!empty($settings['store_logo']))
             <div class="flex items-center justify-center h-11 px-3 bg-white border border-gray-100 rounded-xl shadow-sm transition-all duration-300 group-hover:scale-[1.03] group-hover:shadow-md">
-              <img src="{{ $settings['store_logo'] }}" alt="{{ $storeName }}" class="h-8 w-auto object-contain transition-transform duration-300" style="image-rendering: -webkit-optimize-contrast;">
+              <img src="{{ asset($settings['store_logo']) }}" alt="{{ $storeName }}" class="h-8 w-auto object-contain transition-transform duration-300" style="image-rendering: -webkit-optimize-contrast;">
             </div>
           @else
             <div class="w-9 h-9 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
@@ -397,7 +397,7 @@
       {{-- Background Image --}}
       <div class="absolute inset-0 z-0">
         <img
-          src="{{ $heroBgImage }}"
+          src="{{ asset($heroBgImage) }}"
           alt="Kurma Premium berkualitas tinggi"
           class="w-full h-full object-cover object-center"
           loading="eager"
@@ -525,7 +525,7 @@
           <div class="lg:col-span-5 relative reveal-slide-right w-full max-w-md sm:max-w-lg lg:max-w-none mx-auto">
             <div class="relative rounded-3xl overflow-hidden shadow-2xl aspect-[3/2]">
               <img
-                src="{{ $aboutImage }}"
+                src="{{ asset($aboutImage) }}"
                 alt="Tampilan Dalam Toko"
                 class="w-full h-full object-cover"
                 loading="lazy"
@@ -639,7 +639,7 @@
                     <div>
                       <div class="relative overflow-hidden aspect-[4/3] flex-shrink-0">
                         <img
-                          src="{{ $product->image_url }}"
+                          src="{{ asset($product->image_url) }}"
                           alt="{{ $product->name }}"
                           class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                           loading="lazy"
@@ -1065,7 +1065,7 @@
           <div class="flex items-center gap-2.5 mb-4">
             @if(!empty($settings['store_logo']))
               <div class="inline-flex items-center justify-center h-12 px-3.5 bg-white border border-gray-100 rounded-xl shadow-sm mb-0.5">
-                <img src="{{ $settings['store_logo'] }}" alt="{{ $storeName }}" class="h-9 w-auto object-contain">
+                <img src="{{ asset($settings['store_logo']) }}" alt="{{ $storeName }}" class="h-9 w-auto object-contain">
               </div>
             @else
               <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-xl flex items-center justify-center">

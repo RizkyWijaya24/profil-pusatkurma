@@ -29,7 +29,7 @@
           <tr class="hover:bg-gray-50 transition-colors">
             <td class="px-5 py-4">
               <div class="flex items-center gap-3">
-                <img src="{{ $product->image_url }}" alt="{{ $product->name }}"
+                <img src="{{ asset($product->image_url) }}" alt="{{ $product->name }}"
                      class="w-12 h-12 rounded-xl object-cover flex-shrink-0 border border-gray-100"/>
                 <div>
                   <div class="font-bold text-gray-900">{{ $product->name }}</div>

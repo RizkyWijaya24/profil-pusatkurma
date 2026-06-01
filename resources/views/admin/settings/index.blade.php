@@ -71,7 +71,7 @@
             <div class="flex items-center gap-4">
               <div id="store-logo-preview" class="w-14 h-14 bg-gradient-to-br from-emerald-900 to-emerald-800 rounded-xl flex items-center justify-center overflow-hidden shadow-inner border border-emerald-700/20 flex-shrink-0">
                 @if(!empty($settings['store_logo']))
-                  <img src="{{ $settings['store_logo'] }}" class="h-full w-full object-contain p-1">
+                  <img src="{{ asset($settings['store_logo']) }}" class="h-full w-full object-contain p-1">
                 @else
                   <span class="text-2xl leading-none">🌴</span>
                 @endif
@@ -203,7 +203,7 @@
             <label class="block text-gray-700 font-semibold text-sm mb-1.5">Gambar Hero Saat Ini</label>
             <div id="hero-bg-preview" class="h-32 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-center overflow-hidden">
               @if(!empty($settings['hero_bg_image']))
-                <img src="{{ $settings['hero_bg_image'] }}" class="h-full w-full object-cover">
+                <img src="{{ asset($settings['hero_bg_image']) }}" class="h-full w-full object-cover">
               @else
                 <span class="text-xs text-gray-400">Belum ada gambar</span>
               @endif
@@ -335,7 +335,7 @@
             <label class="block text-gray-700 font-semibold text-sm mb-1.5">Gambar Toko Saat Ini</label>
             <div id="about-img-preview" class="h-32 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-center overflow-hidden">
               @if(!empty($settings['about_image']))
-                <img src="{{ $settings['about_image'] }}" class="h-full w-full object-cover">
+                <img src="{{ asset($settings['about_image']) }}" class="h-full w-full object-cover">
               @else
                 <span class="text-xs text-gray-400">Belum ada gambar</span>
               @endif
