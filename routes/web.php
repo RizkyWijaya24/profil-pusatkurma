@@ -21,6 +21,64 @@ Route::get('/clear-cache', function() {
     return "All Laravel cache cleared successfully!";
 });
 
+// Route untuk membersihkan URL localhost/127.0.0.1 dari database
+Route::get('/fix-image-urls', function() {
+    $report = ['settings_fixed' => [], 'products_fixed' => [], 'errors' => []];
+
+    // Bersihkan settings dengan URL localhost
+    $imageKeys = ['store_logo', 'hero_bg_image', 'about_image'];
+    foreach ($imageKeys as $key) {
+        $setting = \App\Models\Setting::where('key', $key)->first();
+        if (!$setting) continue;
+
+        $val = $setting->getRawOriginal('value') ?? '';
+        if (empty($val)) continue;
+
+        // Ekstrak path relatif dari URL localhost/127.0.0.1
+        if (preg_match('/uploads\/(settings|products)\/.+$/i', $val, $matches)) {
+            $relativePath = $matches[0];
+            if ($val !== $relativePath) {
+                $report['settings_fixed'][] = [
+                    'key' => $key,
+                    'old' => $val,
+                    'new' => $relativePath,
+                ];
+                \App\Models\Setting::set($key, $relativePath);
+            } else {
+                $report['settings_fixed'][] = ['key' => $key, 'status' => 'already_clean', 'value' => $val];
+            }
+        }
+    }
+
+    // Bersihkan products dengan URL localhost
+    $products = \App\Models\Product::all();
+    foreach ($products as $product) {
+        $val = $product->getRawOriginal('image_url') ?? '';
+        if (empty($val)) continue;
+
+        if (preg_match('/uploads\/(products|settings)\/.+$/i', $val, $matches)) {
+            $relativePath = $matches[0];
+            if ($val !== $relativePath) {
+                $report['products_fixed'][] = [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'old' => $val,
+                    'new' => $relativePath,
+                ];
+                $product->update(['image_url' => $relativePath]);
+            } else {
+                $report['products_fixed'][] = ['id' => $product->id, 'name' => $product->name, 'status' => 'already_clean', 'value' => $val];
+            }
+        }
+    }
+
+    // Clear view cache
+    \Illuminate\Support\Facades\Artisan::call('view:clear');
+    \Illuminate\Support\Facades\Artisan::call('cache:clear');
+
+    return response()->json($report, 200, [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+});
+
 Route::get('/check-files', function() {
     $logoPath = \App\Models\Setting::where('key', 'store_logo')->value('value');
     $heroBgPath = \App\Models\Setting::where('key', 'hero_bg_image')->value('value');
