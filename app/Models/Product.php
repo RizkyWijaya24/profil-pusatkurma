@@ -23,21 +23,24 @@ class Product extends Model
             return $value;
         }
 
+        $url = $value;
+
         // Extract the exact relative path if it contains uploads/products/ or uploads/settings/
         if (preg_match('/uploads\/(products|settings)\/.+$/i', $value, $matches)) {
-            return asset($matches[0]);
+            $url = asset($matches[0]);
+        } elseif (!preg_match('/^https?:/i', $value)) {
+            // Fallback for custom relative paths
+            $url = asset($value);
         }
 
-        // If it is already a valid absolute URL (like unsplash or external), return as-is
-        if (preg_match('/^https?:/i', $value)) {
-            if (!preg_match('/^https?:\/\//i', $value)) {
-                return preg_replace('/^(https?):/i', '$1://', $value);
+        // Now, ensure any generated or existing absolute URL has correct double slashes
+        if (preg_match('/^https?:/i', $url)) {
+            if (!preg_match('/^https?:\/\//i', $url)) {
+                $url = preg_replace('/^(https?):/i', '$1://', $url);
             }
-            return $value;
         }
 
-        // Fallback for custom relative paths
-        return asset($value);
+        return $url;
     }
 
     public function scopeActive($query)

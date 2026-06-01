@@ -32,6 +32,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Dynamically fix malformed APP_URL at URL generator level (forces asset() helper to use double slashes)
+        $appUrl = config('app.url');
+        if (!empty($appUrl)) {
+            if (preg_match('/^(https?):(?!\/\/)/i', $appUrl)) {
+                $fixedUrl = preg_replace('/^(https?):/i', '$1://', $appUrl);
+                \Illuminate\Support\Facades\URL::forceRootUrl($fixedUrl);
+            }
+        }
     }
 }

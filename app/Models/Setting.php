@@ -17,21 +17,24 @@ class Setting extends Model
         // Apply dynamic domain resolver only for image/logo keys
         $imageKeys = ['store_logo', 'hero_bg_image', 'about_image'];
         if (in_array($this->key, $imageKeys)) {
+            $url = $value;
+
             // Extract the exact relative path if it contains uploads/settings/ or uploads/products/
             if (preg_match('/uploads\/(settings|products)\/.+$/i', $value, $matches)) {
-                return asset($matches[0]);
+                $url = asset($matches[0]);
+            } elseif (!preg_match('/^https?:/i', $value)) {
+                // Fallback for custom relative paths
+                $url = asset($value);
             }
 
-            // If it is already a valid absolute URL (like unsplash or external), return as-is
-            if (preg_match('/^https?:/i', $value)) {
-                if (!preg_match('/^https?:\/\//i', $value)) {
-                    return preg_replace('/^(https?):/i', '$1://', $value);
+            // Now, ensure any generated or existing absolute URL has correct double slashes
+            if (preg_match('/^https?:/i', $url)) {
+                if (!preg_match('/^https?:\/\//i', $url)) {
+                    $url = preg_replace('/^(https?):/i', '$1://', $url);
                 }
-                return $value;
             }
 
-            // Fallback for custom relative paths
-            return asset($value);
+            return $url;
         }
 
         return $value;
