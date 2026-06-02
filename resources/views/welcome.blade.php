@@ -49,6 +49,12 @@
   <style>
     * { font-family: 'Outfit', sans-serif; }
 
+    html,
+    body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
     /* Navbar scroll effect */
     #navbar { transition: background 0.3s ease, box-shadow 0.3s ease; }
     #navbar.scrolled {
@@ -265,7 +271,7 @@
   </style>
 </head>
 
-<body class="bg-white text-gray-800 antialiased">
+<body class="bg-white text-gray-800 antialiased overflow-x-hidden">
 
   @php
     $storeName = $settings['store_name'] ?? 'Pusat Kurma Premium Cianjur';
@@ -562,7 +568,7 @@
               <div class="absolute inset-0 bg-gradient-to-t from-emerald-950/50 to-transparent"></div>
             </div>
             {{-- Floating badge --}}
-            <div class="trust-badge absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 bg-white rounded-2xl shadow-xl p-4 border border-emerald-100">
+            <div class="trust-badge absolute -bottom-4 right-2 sm:-right-6 bg-white rounded-2xl shadow-xl p-4 border border-emerald-100">
               <div class="flex items-center gap-3">
                 <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center">
                   <span class="text-2xl">🏅</span>
@@ -573,7 +579,7 @@
                 </div>
               </div>
             </div>
-            <div class="absolute -top-4 -left-4 sm:-top-6 sm:-left-6 bg-emerald-900 rounded-2xl shadow-xl p-4">
+            <div class="absolute -top-4 left-2 sm:-left-6 bg-emerald-900 rounded-2xl shadow-xl p-4">
               <div class="text-center">
                 <div class="text-2xl font-black text-yellow-400">10+</div>
                 <div class="text-white font-semibold text-xs leading-tight">Tahun<br/>Berpengalaman</div>
