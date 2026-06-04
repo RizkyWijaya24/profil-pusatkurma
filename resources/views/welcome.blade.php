@@ -775,143 +775,145 @@
     {{-- ============================================================
          KASIR (POS) PRODUCTS SECTION
     ============================================================ --}}
-    @php
-      // Extract unique categories from POS products
-      $categories = $produk_kasir->pluck('category')->unique()->filter()->values();
-    @endphp
+    @if(isset($settings['show_catalog']) && $settings['show_catalog'] == '1')
+      @php
+        // Extract unique categories from POS products
+        $categories = $produk_kasir->pluck('category')->unique()->filter()->values();
+      @endphp
 
-    <section id="produk-kasir" class="py-20 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <div class="text-center max-w-2xl mx-auto mb-10 reveal">
-          <span class="inline-block text-emerald-700 font-bold text-sm tracking-widest uppercase mb-3">Produk Ready Stock</span>
-          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black text-emerald-950 leading-tight mb-4">
-            Pilihan Terbaik <span class="text-emerald-700">Hari Ini</span>
-          </h2>
-          <p class="text-gray-500 text-base sm:text-lg font-medium leading-relaxed">
-            Daftar produk di bawah ini selalu diperbarui secara otomatis dan real-time sesuai dengan ketersediaan stok di toko kami.
-          </p>
-        </div>
-
-        @if($categories->count() > 0)
-          <!-- Category Filter Tabs -->
-          <div class="flex flex-wrap justify-center items-center gap-3 mb-10 reveal">
-            <button 
-              onclick="filterCategory('all', this)" 
-              class="category-filter-btn px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 bg-emerald-900 text-white shadow-md cursor-pointer"
-            >
-              Semua
-            </button>
-            @foreach($categories as $category)
-              <button 
-                onclick="filterCategory('{{ Str::slug($category) }}', this)" 
-                class="category-filter-btn px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 bg-slate-100 text-emerald-950 hover:bg-slate-200 cursor-pointer"
-              >
-                {{ $category }}
-              </button>
-            @endforeach
+      <section id="produk-kasir" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="text-center max-w-2xl mx-auto mb-10 reveal">
+            <span class="inline-block text-emerald-700 font-bold text-sm tracking-widest uppercase mb-3">Produk Ready Stock</span>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black text-emerald-950 leading-tight mb-4">
+              Pilihan Terbaik <span class="text-emerald-700">Hari Ini</span>
+            </h2>
+            <p class="text-gray-500 text-base sm:text-lg font-medium leading-relaxed">
+              Daftar produk di bawah ini selalu diperbarui secara otomatis dan real-time sesuai dengan ketersediaan stok di toko kami.
+            </p>
           </div>
-        @endif
 
-        <!-- Bootstrap Grid (row & col) combined with Tailwind styling for visual excellence -->
-        <div class="row g-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          @forelse($produk_kasir as $produk)
-            <!-- Bootstrap Col Class: col-lg-3 col-md-4 col-sm-6 -->
-            <div class="col-lg-3 col-md-4 col-sm-6 product-item transform" data-category="{{ Str::slug($produk->category) }}" style="transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);">
-              <!-- Bootstrap Card Class: card h-100 shadow-sm border-0 -->
-              <div class="card h-100 shadow-sm border-0 rounded-3xl overflow-hidden bg-white border border-gray-100 flex flex-col justify-between transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-                
-                <div class="position-relative relative overflow-hidden aspect-[4/3] w-full">
-                  <!-- Tag img pointing to static subdomain kasir storage -->
-                  <img 
-                    src="https://pos.pusatkurmacianjur.my.id/storage/{{ $produk->image_path }}" 
-                    class="card-img-top w-full h-full object-cover" 
-                    alt="{{ $produk->name }}" 
-                    onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1571680322279-a226e6a4cc2a?w=600&q=80&auto=format&fit=crop';"
-                  >
-                  <!-- Badge for stock -->
-                  <span class="position-absolute top-2 right-2 bg-emerald-900 text-white font-bold text-xs px-2.5 py-1 rounded-full absolute top-3 right-3 z-10">
-                    Stok: {{ $produk->stock }}
-                  </span>
+          @if($categories->count() > 0)
+            <!-- Category Filter Tabs -->
+            <div class="flex flex-wrap justify-center items-center gap-3 mb-10 reveal">
+              <button 
+                onclick="filterCategory('all', this)" 
+                class="category-filter-btn px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 bg-emerald-900 text-white shadow-md cursor-pointer"
+              >
+                Semua
+              </button>
+              @foreach($categories as $category)
+                <button 
+                  onclick="filterCategory('{{ Str::slug($category) }}', this)" 
+                  class="category-filter-btn px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 bg-slate-100 text-emerald-950 hover:bg-slate-200 cursor-pointer"
+                >
+                  {{ $category }}
+                </button>
+              @endforeach
+            </div>
+          @endif
+
+          <!-- Bootstrap Grid (row & col) combined with Tailwind styling for visual excellence -->
+          <div class="row g-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            @forelse($produk_kasir as $produk)
+              <!-- Bootstrap Col Class: col-lg-3 col-md-4 col-sm-6 -->
+              <div class="col-lg-3 col-md-4 col-sm-6 product-item transform" data-category="{{ Str::slug($produk->category) }}" style="transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);">
+                <!-- Bootstrap Card Class: card h-100 shadow-sm border-0 -->
+                <div class="card h-100 shadow-sm border-0 rounded-3xl overflow-hidden bg-white border border-gray-100 flex flex-col justify-between transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
                   
-                  @if(!empty($produk->category))
-                    <!-- Badge for category -->
-                    <span class="position-absolute bottom-2 left-2 bg-yellow-500 text-emerald-950 font-bold text-3xs px-2.5 py-1 rounded absolute bottom-3 left-3 z-10">
-                      {{ $produk->category }}
+                  <div class="position-relative relative overflow-hidden aspect-[4/3] w-full">
+                    <!-- Tag img pointing to static subdomain kasir storage -->
+                    <img 
+                      src="https://pos.pusatkurmacianjur.my.id/storage/{{ $produk->image_path }}" 
+                      class="card-img-top w-full h-full object-cover" 
+                      alt="{{ $produk->name }}" 
+                      onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1571680322279-a226e6a4cc2a?w=600&q=80&auto=format&fit=crop';"
+                    >
+                    <!-- Badge for stock -->
+                    <span class="position-absolute top-2 right-2 bg-emerald-900 text-white font-bold text-xs px-2.5 py-1 rounded-full absolute top-3 right-3 z-10">
+                      Stok: {{ $produk->stock }}
                     </span>
-                  @endif
-                </div>
-
-                <!-- Bootstrap Card Body Class: card-body -->
-                <div class="card-body p-5 sm:p-6 flex flex-col justify-between flex-grow">
-                  <div>
-                    <!-- Bootstrap Card Title Class: card-title -->
-                    <h5 class="card-title font-extrabold text-emerald-950 text-xl mb-4">{{ $produk->name }}</h5>
-                    {{-- 
-                    <p class="card-text text-yellow-600 font-black text-2xl mb-4">
-                      Rp {{ number_format($produk->selling_price, 0, ',', '.') }}
-                    </p>
-                    --}}
+                    
+                    @if(!empty($produk->category))
+                      <!-- Badge for category -->
+                      <span class="position-absolute bottom-2 left-2 bg-yellow-500 text-emerald-950 font-bold text-3xs px-2.5 py-1 rounded absolute bottom-3 left-3 z-10">
+                        {{ $produk->category }}
+                      </span>
+                    @endif
                   </div>
-                  
-                  <a 
-                    href="https://api.whatsapp.com/send?phone={{ $waNumClean }}&amp;text=Halo%20Admin%20Pusat%20Kurma%2C%20saya%20tertarik%20dengan%20produk%20*{{ urlencode($produk->name) }}*%20yang%20ada%20di%20katalog%20website." 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    class="btn btn-success bg-emerald-900 hover:bg-emerald-800 text-white font-bold text-sm px-4 py-3.5 rounded-xl w-full transition-all duration-200 hover:shadow-lg text-center d-block"
-                  >
-                    Beli Sekarang
-                  </a>
+
+                  <!-- Bootstrap Card Body Class: card-body -->
+                  <div class="card-body p-5 sm:p-6 flex flex-col justify-between flex-grow">
+                    <div>
+                      <!-- Bootstrap Card Title Class: card-title -->
+                      <h5 class="card-title font-extrabold text-emerald-950 text-xl mb-4">{{ $produk->name }}</h5>
+                      {{-- 
+                      <p class="card-text text-yellow-600 font-black text-2xl mb-4">
+                        Rp {{ number_format($produk->selling_price, 0, ',', '.') }}
+                      </p>
+                      --}}
+                    </div>
+                    
+                    <a 
+                      href="https://api.whatsapp.com/send?phone={{ $waNumClean }}&amp;text=Halo%20Admin%20Pusat%20Kurma%2C%20saya%20tertarik%20dengan%20produk%20*{{ urlencode($produk->name) }}*%20yang%20ada%20di%20katalog%20website." 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      class="btn btn-success bg-emerald-900 hover:bg-emerald-800 text-white font-bold text-sm px-4 py-3.5 rounded-xl w-full transition-all duration-200 hover:shadow-lg text-center d-block"
+                    >
+                      Beli Sekarang
+                    </a>
+                  </div>
+
                 </div>
-
               </div>
-            </div>
-          @empty
-            <div class="col-12 w-full text-center py-16 text-gray-400">
-              <span class="text-4xl">🛍️</span>
-              <p class="font-semibold mt-2">Belum ada produk aktif saat ini.</p>
-            </div>
-          @endforelse
+            @empty
+              <div class="col-12 w-full text-center py-16 text-gray-400">
+                <span class="text-4xl">🛍️</span>
+                <p class="font-semibold mt-2">Belum ada produk aktif saat ini.</p>
+              </div>
+            @endforelse
+          </div>
+
         </div>
+      </section>
 
-      </div>
-    </section>
+      <!-- Category Filter Script -->
+      <script>
+        function filterCategory(category, buttonElement) {
+          // Update active classes on filter buttons
+          const buttons = document.querySelectorAll('.category-filter-btn');
+          buttons.forEach(btn => {
+            btn.classList.remove('bg-emerald-900', 'text-white', 'shadow-md');
+            btn.classList.add('bg-slate-100', 'text-emerald-950', 'hover:bg-slate-200');
+          });
+          
+          buttonElement.classList.remove('bg-slate-100', 'text-emerald-950', 'hover:bg-slate-200');
+          buttonElement.classList.add('bg-emerald-900', 'text-white', 'shadow-md');
 
-    <!-- Category Filter Script -->
-    <script>
-      function filterCategory(category, buttonElement) {
-        // Update active classes on filter buttons
-        const buttons = document.querySelectorAll('.category-filter-btn');
-        buttons.forEach(btn => {
-          btn.classList.remove('bg-emerald-900', 'text-white', 'shadow-md');
-          btn.classList.add('bg-slate-100', 'text-emerald-950', 'hover:bg-slate-200');
-        });
-        
-        buttonElement.classList.remove('bg-slate-100', 'text-emerald-950', 'hover:bg-slate-200');
-        buttonElement.classList.add('bg-emerald-900', 'text-white', 'shadow-md');
-
-        // Filter products with a smooth fade & scale animation
-        const items = document.querySelectorAll('.product-item');
-        items.forEach(item => {
-          if (category === 'all' || item.getAttribute('data-category') === category) {
-            item.style.display = 'block';
-            // Trigger reflow to apply transition
-            item.offsetHeight;
-            item.style.opacity = '1';
-            item.style.transform = 'scale(1)';
-          } else {
-            item.style.opacity = '0';
-            item.style.transform = 'scale(0.95)';
-            // Hide element after transition completes
-            setTimeout(() => {
-              if (item.style.opacity === '0') {
-                item.style.display = 'none';
-              }
-            }, 350);
-          }
-        });
-      }
-    </script>
+          // Filter products with a smooth fade & scale animation
+          const items = document.querySelectorAll('.product-item');
+          items.forEach(item => {
+            if (category === 'all' || item.getAttribute('data-category') === category) {
+              item.style.display = 'block';
+              // Trigger reflow to apply transition
+              item.offsetHeight;
+              item.style.opacity = '1';
+              item.style.transform = 'scale(1)';
+            } else {
+              item.style.opacity = '0';
+              item.style.transform = 'scale(0.95)';
+              // Hide element after transition completes
+              setTimeout(() => {
+                if (item.style.opacity === '0') {
+                  item.style.display = 'none';
+                }
+              }, 350);
+            }
+          });
+        }
+      </script>
+    @endif
 
     {{-- ============================================================
          TESTIMONIALS

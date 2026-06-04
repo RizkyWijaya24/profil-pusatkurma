@@ -143,6 +143,25 @@
           </div>
       </div>
 
+      {{-- Card: Pengaturan Tampilan Katalog --}}
+      <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-5 col-span-full">
+        <h3 class="font-extrabold text-emerald-950 text-base border-b border-gray-50 pb-3 flex items-center gap-2">
+          <span>🛍️</span> Integrasi & Tampilan Katalog
+        </h3>
+        
+        <div class="flex items-center justify-between p-4 bg-emerald-50/20 rounded-xl border border-emerald-100/50">
+          <div class="space-y-1">
+            <label class="block text-emerald-950 font-bold text-sm">Tampilkan Katalog Produk (Ready Stock)</label>
+            <p class="text-xs text-gray-500 font-medium">Aktifkan untuk memunculkan bagian katalog produk ready stock dari database Kasir di halaman depan utama.</p>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer select-none">
+            <input type="hidden" name="show_catalog" value="0">
+            <input type="checkbox" name="show_catalog" value="1" id="show_catalog_toggle" class="sr-only peer" {{ (isset($settings['show_catalog']) && $settings['show_catalog'] == '1') ? 'checked' : '' }}>
+            <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+          </label>
+        </div>
+      </div>
+
       {{-- Card: Cabang Toko Resmi --}}
       <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-5">
         <div class="flex items-center justify-between border-b border-gray-50 pb-3 flex-wrap gap-2">

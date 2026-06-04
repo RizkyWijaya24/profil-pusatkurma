@@ -75,6 +75,7 @@ class SettingController extends Controller
             
             'cta_headline'       => 'nullable|string|max:200',
             'cta_sub'            => 'nullable|string',
+            'show_catalog'       => 'nullable|string',
         ]);
 
         $keys = [
@@ -85,7 +86,7 @@ class SettingController extends Controller
             'about_h1_icon', 'about_h1_title', 'about_h1_desc', 'about_h2_icon', 'about_h2_title', 'about_h2_desc',
             'about_h3_icon', 'about_h3_title', 'about_h3_desc', 'about_h4_icon', 'about_h4_title', 'about_h4_desc',
             'about_c1_icon', 'about_c1_title', 'about_c1_desc', 'about_c2_icon', 'about_c2_title', 'about_c2_desc',
-            'about_c3_icon', 'about_c3_title', 'about_c3_desc', 'cta_headline', 'cta_sub',
+            'about_c3_icon', 'about_c3_title', 'about_c3_desc', 'cta_headline', 'cta_sub', 'show_catalog',
         ];
 
         foreach ($keys as $key) {
