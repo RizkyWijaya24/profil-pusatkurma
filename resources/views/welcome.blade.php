@@ -773,6 +773,77 @@
     </section>
 
     {{-- ============================================================
+         KASIR (POS) PRODUCTS SECTION
+    ============================================================ --}}
+    <section id="produk-kasir" class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+          <span class="inline-block text-emerald-700 font-bold text-sm tracking-widest uppercase mb-3">Produk Toko Kasir (POS)</span>
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black text-emerald-950 leading-tight mb-4">
+            Stok Otomatis <span class="text-emerald-700">Real-time</span>
+          </h2>
+          <p class="text-gray-500 text-base sm:text-lg font-medium leading-relaxed">
+            Daftar produk di bawah ini diambil langsung dari database Aplikasi Kasir (POS) kami secara otomatis dan real-time.
+          </p>
+        </div>
+
+        <!-- Bootstrap Grid (row & col) combined with Tailwind styling for visual excellence -->
+        <div class="row g-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          @forelse($produk_kasir as $produk)
+            <!-- Bootstrap Col Class: col-lg-3 col-md-4 col-sm-6 -->
+            <div class="col-lg-3 col-md-4 col-sm-6">
+              <!-- Bootstrap Card Class: card h-100 shadow-sm border-0 -->
+              <div class="card h-100 shadow-sm border-0 rounded-3xl overflow-hidden bg-white border border-gray-100 flex flex-col justify-between transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+                
+                <div class="position-relative relative overflow-hidden aspect-[4/3] w-full">
+                  <!-- Tag img pointing to static subdomain kasir storage -->
+                  <img 
+                    src="https://pos.pusatkurmacianjur.my.id/storage/{{ $produk->image_path }}" 
+                    class="card-img-top w-full h-full object-cover" 
+                    alt="{{ $produk->name }}" 
+                    onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1571680322279-a226e6a4cc2a?w=600&q=80&auto=format&fit=crop';"
+                  >
+                  <!-- Badge for stock -->
+                  <span class="position-absolute top-2 right-2 bg-emerald-900 text-white font-bold text-xs px-2.5 py-1 rounded-full absolute top-3 right-3 z-10">
+                    Stok: {{ $produk->stock }}
+                  </span>
+                </div>
+
+                <!-- Bootstrap Card Body Class: card-body -->
+                <div class="card-body p-5 sm:p-6 flex flex-col justify-between flex-grow">
+                  <div>
+                    <!-- Bootstrap Card Title Class: card-title -->
+                    <h5 class="card-title font-extrabold text-emerald-950 text-xl mb-1.5">{{ $produk->name }}</h5>
+                    <p class="card-text text-yellow-600 font-black text-2xl mb-4">
+                      Rp {{ number_format($produk->selling_price, 0, ',', '.') }}
+                    </p>
+                  </div>
+                  
+                  <a 
+                    href="https://api.whatsapp.com/send?phone={{ $waNumClean }}&amp;text=Halo%20Admin%20Pusat%20Kurma%2C%20saya%20tertarik%20dengan%20produk%20*{{ urlencode($produk->name) }}*%20dari%20Katalog%20Kasir." 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    class="btn btn-success bg-emerald-900 hover:bg-emerald-800 text-white font-bold text-sm px-4 py-3.5 rounded-xl w-full transition-all duration-200 hover:shadow-lg text-center d-block"
+                  >
+                    Beli Sekarang
+                  </a>
+                </div>
+
+              </div>
+            </div>
+          @empty
+            <div class="col-12 w-full text-center py-16 text-gray-400">
+              <span class="text-4xl">🛍️</span>
+              <p class="font-semibold mt-2">Belum ada produk aktif dari Kasir saat ini.</p>
+            </div>
+          @endforelse
+        </div>
+
+      </div>
+    </section>
+
+    {{-- ============================================================
          TESTIMONIALS
     ============================================================ --}}
     <section class="py-20 bg-emerald-950 overflow-hidden relative">
