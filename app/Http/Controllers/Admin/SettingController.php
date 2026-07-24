@@ -5,13 +5,29 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SettingController extends Controller
 {
     public function index()
     {
         $settings = Setting::all()->pluck('value', 'key');
-        return view('admin.settings.index', compact('settings'));
+
+        $pos_products = collect();
+        $pos_categories = collect();
+        $pos_connection_error = null;
+
+        try {
+            $allPos = DB::connection('mysql_kasir')
+                ->table('products')
+                ->get();
+            $pos_products = $allPos;
+            $pos_categories = $allPos->pluck('category')->unique()->filter()->values();
+        } catch (\Throwable $e) {
+            $pos_connection_error = $e->getMessage();
+        }
+
+        return view('admin.settings.index', compact('settings', 'pos_products', 'pos_categories', 'pos_connection_error'));
     }
 
     public function update(Request $request)
@@ -76,6 +92,10 @@ class SettingController extends Controller
             'cta_headline'       => 'nullable|string|max:200',
             'cta_sub'            => 'nullable|string',
             'show_catalog'       => 'nullable|string',
+            'pos_filter_mode'    => 'nullable|string',
+            'pos_only_with_image'=> 'nullable|string',
+            'pos_selected_products'   => 'nullable',
+            'pos_selected_categories' => 'nullable',
         ]);
 
         $keys = [
@@ -87,10 +107,27 @@ class SettingController extends Controller
             'about_h3_icon', 'about_h3_title', 'about_h3_desc', 'about_h4_icon', 'about_h4_title', 'about_h4_desc',
             'about_c1_icon', 'about_c1_title', 'about_c1_desc', 'about_c2_icon', 'about_c2_title', 'about_c2_desc',
             'about_c3_icon', 'about_c3_title', 'about_c3_desc', 'cta_headline', 'cta_sub', 'show_catalog',
+            'pos_filter_mode', 'pos_only_with_image',
         ];
 
         foreach ($keys as $key) {
             Setting::set($key, $request->input($key));
+        }
+
+        // Save pos_selected_products as JSON string
+        $selectedProds = $request->input('pos_selected_products', []);
+        if (is_array($selectedProds)) {
+            Setting::set('pos_selected_products', json_encode(array_values(array_map('intval', $selectedProds))));
+        } else {
+            Setting::set('pos_selected_products', $selectedProds ?? '[]');
+        }
+
+        // Save pos_selected_categories as JSON string
+        $selectedCats = $request->input('pos_selected_categories', []);
+        if (is_array($selectedCats)) {
+            Setting::set('pos_selected_categories', json_encode(array_values($selectedCats)));
+        } else {
+            Setting::set('pos_selected_categories', $selectedCats ?? '[]');
         }
 
         // Handle File Uploads & Deletion

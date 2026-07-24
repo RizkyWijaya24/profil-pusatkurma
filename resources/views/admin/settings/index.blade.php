@@ -43,6 +43,9 @@
       <button type="button" onclick="switchTab(event, 'tab-cta')" class="tab-btn px-5 py-3 text-sm font-extrabold border-b-2 border-transparent text-gray-500 hover:text-emerald-700 hover:border-emerald-200 transition-all duration-200 flex items-center gap-2">
         <span>📣</span> Banner CTA
       </button>
+      <button type="button" onclick="switchTab(event, 'tab-pos')" class="tab-btn px-5 py-3 text-sm font-extrabold border-b-2 border-transparent text-gray-500 hover:text-emerald-700 hover:border-emerald-200 transition-all duration-200 flex items-center gap-2">
+        <span>💻</span> Filter Katalog POS
+      </button>
     </div>
   </div>
 
@@ -143,11 +146,16 @@
           </div>
       </div>
 
-      {{-- Card: Pengaturan Tampilan Katalog --}}
-      <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-5 col-span-full">
-        <h3 class="font-extrabold text-emerald-950 text-base border-b border-gray-50 pb-3 flex items-center gap-2">
-          <span>🛍️</span> Integrasi & Tampilan Katalog
-        </h3>
+      {{-- Card: Pengaturan Tampilan & Filter Katalog POS --}}
+      <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-4 col-span-full">
+        <div class="flex items-center justify-between border-b border-gray-50 pb-3 flex-wrap gap-2">
+          <h3 class="font-extrabold text-emerald-950 text-base flex items-center gap-2">
+            <span>💻</span> Integrasi & Filter Katalog POS Kasir
+          </h3>
+          <button type="button" onclick="switchTab(event, 'tab-pos')" class="text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-3 py-1.5 rounded-lg transition-all flex items-center gap-1">
+            <span>⚙️</span> Buka Pengaturan Filter POS &rarr;
+          </button>
+        </div>
         
         <div class="flex items-center justify-between p-4 bg-emerald-50/20 rounded-xl border border-emerald-100/50">
           <div class="space-y-1">
@@ -551,6 +559,176 @@
       </div>
     </div>
 
+    {{-- TAB 6: FILTER KATALOG POS --}}
+    <div id="tab-pos" class="tab-pane space-y-6 hidden">
+      <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-6">
+        <div class="flex items-center justify-between border-b border-gray-50 pb-3 flex-wrap gap-2">
+          <h3 class="font-extrabold text-emerald-950 text-base flex items-center gap-2">
+            <span>💻</span> Integrasi & Filter Katalog POS Kasir
+          </h3>
+          @if($pos_connection_error)
+            <span class="bg-amber-50 text-amber-700 border border-amber-200 text-xs px-3 py-1 rounded-full font-bold">
+              ⚠️ Database POS Off / Offline ({{ $pos_connection_error }})
+            </span>
+          @else
+            <span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs px-3 py-1 rounded-full font-bold flex items-center gap-1.5">
+              <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+              <span>Terhubung ({{ count($pos_products) }} Produk Terdeteksi)</span>
+            </span>
+          @endif
+        </div>
+        
+        {{-- Toggle Aktifkan POS --}}
+        <div class="flex items-center justify-between p-4 bg-emerald-50/30 rounded-xl border border-emerald-100/60">
+          <div class="space-y-1">
+            <label class="block text-emerald-950 font-bold text-sm">Tampilkan Katalog Produk POS di Halaman Utama</label>
+            <p class="text-xs text-gray-500 font-medium">Aktifkan untuk memunculkan bagian katalog produk ready stock dari sistem Kasir POS di website.</p>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer select-none">
+            <input type="hidden" name="show_catalog" value="0">
+            <input type="checkbox" name="show_catalog" value="1" class="sr-only peer" {{ (isset($settings['show_catalog']) && $settings['show_catalog'] == '1') ? 'checked' : '' }}>
+            <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+          </label>
+        </div>
+
+        {{-- Toggle Hanya Produk Bergambar --}}
+        <div class="flex items-center justify-between p-4 bg-yellow-50/50 rounded-xl border border-yellow-200/60">
+          <div class="space-y-1">
+            <label class="block text-emerald-950 font-bold text-sm">Hanya Tampilkan Produk yang Ada Gambarnya 🖼️</label>
+            <p class="text-xs text-gray-500 font-medium">Jika diaktifkan, produk POS yang tidak memiliki foto/gambar tidak akan dimunculkan di katalog halaman depan.</p>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer select-none">
+            <input type="hidden" name="pos_only_with_image" value="0">
+            <input type="checkbox" name="pos_only_with_image" value="1" class="sr-only peer" {{ (isset($settings['pos_only_with_image']) && $settings['pos_only_with_image'] == '1') ? 'checked' : '' }}>
+            <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+          </label>
+        </div>
+
+        @php
+          $currentFilterMode = $settings['pos_filter_mode'] ?? 'all';
+          $savedSelectedProds = json_decode($settings['pos_selected_products'] ?? '[]', true) ?: [];
+          $savedSelectedCats  = json_decode($settings['pos_selected_categories'] ?? '[]', true) ?: [];
+        @endphp
+
+        {{-- Filter Mode Radio Buttons --}}
+        <div class="space-y-3 pt-2">
+          <label class="block text-gray-800 font-extrabold text-sm">Pilih Mode Filter Produk POS ke Katalog:</label>
+          
+          <div class="grid md:grid-cols-3 gap-3">
+            <label class="pos-mode-card flex items-start gap-3 p-4 rounded-xl border border-gray-200 hover:border-emerald-500 bg-white cursor-pointer transition-all">
+              <input type="radio" name="pos_filter_mode" value="all" onchange="togglePosFilterPanels()" class="mt-1 text-emerald-600 focus:ring-emerald-500" {{ $currentFilterMode === 'all' ? 'checked' : '' }}>
+              <div>
+                <div class="font-extrabold text-sm text-emerald-950">Semua Produk POS</div>
+                <div class="text-xs text-gray-500 mt-0.5">Tampilkan semua produk POS yang ada stok (> 0) tanpa filter.</div>
+              </div>
+            </label>
+
+            <label class="pos-mode-card flex items-start gap-3 p-4 rounded-xl border border-gray-200 hover:border-emerald-500 bg-white cursor-pointer transition-all">
+              <input type="radio" name="pos_filter_mode" value="selected" onchange="togglePosFilterPanels()" class="mt-1 text-emerald-600 focus:ring-emerald-500" {{ $currentFilterMode === 'selected' ? 'checked' : '' }}>
+              <div>
+                <div class="font-extrabold text-sm text-emerald-950">Pilih Produk Tertentu</div>
+                <div class="text-xs text-gray-500 mt-0.5">Pilih produk-produk POS spesifik yang diizinkan tampil.</div>
+              </div>
+            </label>
+
+            <label class="pos-mode-card flex items-start gap-3 p-4 rounded-xl border border-gray-200 hover:border-emerald-500 bg-white cursor-pointer transition-all">
+              <input type="radio" name="pos_filter_mode" value="categories" onchange="togglePosFilterPanels()" class="mt-1 text-emerald-600 focus:ring-emerald-500" {{ $currentFilterMode === 'categories' ? 'checked' : '' }}>
+              <div>
+                <div class="font-extrabold text-sm text-emerald-950">Pilih Kategori POS</div>
+                <div class="text-xs text-gray-500 mt-0.5">Filter berdasarkan kategori produk dari POS.</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        {{-- Panel 1: Filter per Produk POS --}}
+        <div id="panel-pos-selected" class="pos-filter-panel border border-emerald-100 rounded-xl p-5 bg-slate-50/60 space-y-4 {{ $currentFilterMode !== 'selected' ? 'hidden' : '' }}">
+          <div class="flex items-center justify-between flex-wrap gap-3">
+            <div>
+              <h4 class="font-extrabold text-sm text-emerald-950">Daftar Produk POS yang Diizinkan Tampil</h4>
+              <p class="text-xs text-gray-500">Beri centang pada produk POS yang ingin dimunculkan di katalog website.</p>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <button type="button" onclick="selectPosProdsWithImageOnly()" class="text-xs font-bold text-amber-800 bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded-lg transition-colors cursor-pointer flex items-center gap-1">
+                <span>🖼️</span> Centang Hanya Yang Bergambar
+              </button>
+              <button type="button" onclick="selectAllPosProds(true)" class="text-xs font-bold text-emerald-700 bg-emerald-100 hover:bg-emerald-200 px-3 py-1.5 rounded-lg transition-colors cursor-pointer">Centang Semua</button>
+              <button type="button" onclick="selectAllPosProds(false)" class="text-xs font-bold text-gray-600 bg-gray-200 hover:bg-gray-300 px-3 py-1.5 rounded-lg transition-colors cursor-pointer">Hapus Semua</button>
+            </div>
+          </div>
+
+          <div>
+            <input type="text" id="pos-prod-search" onkeyup="filterPosProdList()" placeholder="🔍 Cari nama produk POS..." class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-xs outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10">
+          </div>
+
+          <div class="max-h-80 overflow-y-auto pr-1 space-y-2" id="pos-products-list-container">
+            @forelse($pos_products as $p)
+              @php
+                $isCheck = in_array((int)$p->id, array_map('intval', $savedSelectedProds));
+                $hasImage = !empty($p->image_path);
+              @endphp
+              <label class="pos-prod-item flex items-center justify-between p-3 bg-white border border-gray-200 rounded-xl hover:border-emerald-300 cursor-pointer transition-colors" data-name="{{ strtolower($p->name) }}" data-has-image="{{ $hasImage ? '1' : '0' }}">
+                <div class="flex items-center gap-3">
+                  <input type="checkbox" name="pos_selected_products[]" value="{{ $p->id }}" class="pos-prod-checkbox w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-gray-300 cursor-pointer" {{ $isCheck ? 'checked' : '' }}>
+                  <div>
+                    <div class="font-extrabold text-xs text-gray-800 flex items-center gap-1.5">
+                      <span>{{ $p->name }}</span>
+                      @if($hasImage)
+                        <span class="text-2xs bg-emerald-50 text-emerald-700 border border-emerald-200 px-1.5 py-0.2 rounded font-semibold">🖼️ Bergambar</span>
+                      @else
+                        <span class="text-2xs bg-gray-100 text-gray-500 px-1.5 py-0.2 rounded font-normal">Tanpa Foto</span>
+                      @endif
+                    </div>
+                    <div class="text-2xs text-gray-400 font-medium">Kategori: {{ $p->category ?? 'Umum' }}</div>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <div class="text-xs font-bold text-emerald-700">Stok: {{ $p->stock }}</div>
+                </div>
+              </label>
+            @empty
+              <div class="p-6 text-center text-xs text-gray-400 font-medium">
+                @if($pos_connection_error)
+                  ⚠️ Tidak dapat memuat daftar produk POS: {{ $pos_connection_error }}
+                @else
+                  Belum ada produk terdaftar di sistem POS Kasir.
+                @endif
+              </div>
+            @endforelse
+          </div>
+        </div>
+
+        {{-- Panel 2: Filter per Kategori POS --}}
+        <div id="panel-pos-categories" class="pos-filter-panel border border-emerald-100 rounded-xl p-5 bg-slate-50/60 space-y-4 {{ $currentFilterMode !== 'categories' ? 'hidden' : '' }}">
+          <div>
+            <h4 class="font-extrabold text-sm text-emerald-950">Daftar Kategori POS yang Diizinkan Tampil</h4>
+            <p class="text-xs text-gray-500">Pilih kategori produk POS mana saja yang ingin ditampilkan di katalog.</p>
+          </div>
+
+          <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
+            @forelse($pos_categories as $cat)
+              @php
+                $isCatCheck = in_array($cat, $savedSelectedCats);
+              @endphp
+              <label class="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-xl hover:border-emerald-300 cursor-pointer transition-colors">
+                <input type="checkbox" name="pos_selected_categories[]" value="{{ $cat }}" class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-gray-300 cursor-pointer" {{ $isCatCheck ? 'checked' : '' }}>
+                <span class="font-extrabold text-xs text-gray-800">{{ $cat }}</span>
+              </label>
+            @empty
+              <div class="col-span-full p-6 text-center text-xs text-gray-400 font-medium">
+                @if($pos_connection_error)
+                  ⚠️ Tidak dapat memuat daftar kategori POS: {{ $pos_connection_error }}
+                @else
+                  Belum ada kategori terdaftar di sistem POS Kasir.
+                @endif
+              </div>
+            @endforelse
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 
   {{-- Floating Save Bar --}}
@@ -562,6 +740,43 @@
 </form>
 
 <script>
+  function togglePosFilterPanels() {
+    const selectedMode = document.querySelector('input[name="pos_filter_mode"]:checked')?.value || 'all';
+    const panelSelected = document.getElementById('panel-pos-selected');
+    const panelCategories = document.getElementById('panel-pos-categories');
+    
+    if (panelSelected) panelSelected.classList.toggle('hidden', selectedMode !== 'selected');
+    if (panelCategories) panelCategories.classList.toggle('hidden', selectedMode !== 'categories');
+  }
+
+  function selectAllPosProds(check) {
+    const checkboxes = document.querySelectorAll('.pos-prod-checkbox');
+    checkboxes.forEach(cb => cb.checked = check);
+  }
+
+  function selectPosProdsWithImageOnly() {
+    const items = document.querySelectorAll('.pos-prod-item');
+    items.forEach(item => {
+      const cb = item.querySelector('.pos-prod-checkbox');
+      const hasImg = item.getAttribute('data-has-image') === '1';
+      if (cb) {
+        cb.checked = hasImg;
+      }
+    });
+  }
+
+  function filterPosProdList() {
+    const query = document.getElementById('pos-prod-search').value.toLowerCase().trim();
+    const items = document.querySelectorAll('.pos-prod-item');
+    items.forEach(item => {
+      const name = item.getAttribute('data-name') || '';
+      if (!query || name.includes(query)) {
+        item.style.display = 'flex';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  }
   function switchTab(evt, tabId) {
     // Hide all tab panes
     const tabPanes = document.querySelectorAll('.tab-pane');

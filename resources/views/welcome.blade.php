@@ -434,7 +434,7 @@
     // Dynamic additions
     $heroBgImage = $toImageUrl(
         $settings['hero_bg_image'] ?? '',
-        'https://images.unsplash.com/photo-1571680322279-a226e6a4cc2a?w=1600&q=80&auto=format&fit=crop'
+        'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=1600&q=80&auto=format&fit=crop'
     );
     $aboutImage = $toImageUrl(
         $settings['about_image'] ?? '',
@@ -1001,12 +1001,25 @@
                       src="https://pos.pusatkurmacianjur.my.id/storage/{{ $produk->image_path }}" 
                       class="card-img-top w-full h-full object-cover" 
                       alt="{{ $produk->name }}" 
-                      onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1571680322279-a226e6a4cc2a?w=600&q=80&auto=format&fit=crop';"
+                      @if(isset($settings['pos_only_with_image']) && $settings['pos_only_with_image'] == '1')
+                        onerror="this.closest('.product-item').style.display='none';"
+                      @else
+                        onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80&auto=format&fit=crop';"
+                      @endif
                     >
-                    <!-- Badge for stock -->
-                    <span class="position-absolute top-2 right-2 bg-emerald-900 text-white font-bold text-xs px-2.5 py-1 rounded-full absolute top-3 right-3 z-10">
-                      Stok: {{ $produk->stock }}
-                    </span>
+                    <!-- Badge for price -->
+                    @if(!empty($produk->selling_price) && $produk->selling_price > 0)
+                      @php
+                        $isGram = strtolower($produk->price_unit ?? '') === 'gram';
+                      @endphp
+                      <span class="position-absolute top-2 right-2 bg-emerald-900 text-yellow-400 font-extrabold text-xs px-3 py-1 rounded-full absolute top-3 right-3 z-10 shadow-md">
+                        @if($isGram)
+                          Mulai Rp {{ number_format($produk->selling_price * 250, 0, ',', '.') }} / 250g
+                        @else
+                          Rp {{ number_format($produk->selling_price, 0, ',', '.') }}{{ !empty($produk->price_unit) ? ' / ' . $produk->price_unit : '' }}
+                        @endif
+                      </span>
+                    @endif
                     
                     @if(!empty($produk->category))
                       <!-- Badge for category -->
@@ -1020,12 +1033,42 @@
                   <div class="card-body p-5 sm:p-6 flex flex-col justify-between flex-grow">
                     <div>
                       <!-- Bootstrap Card Title Class: card-title -->
-                      <h5 class="card-title font-extrabold text-emerald-950 text-xl mb-4">{{ $produk->name }}</h5>
-                      {{-- 
-                      <p class="card-text text-yellow-600 font-black text-2xl mb-4">
-                        Rp {{ number_format($produk->selling_price, 0, ',', '.') }}
-                      </p>
-                      --}}
+                      <h5 class="card-title font-extrabold text-emerald-950 text-xl mb-3">{{ $produk->name }}</h5>
+                      
+                      @if(!empty($produk->selling_price) && $produk->selling_price > 0)
+                        @if(strtolower($produk->price_unit ?? '') === 'gram')
+                          {{-- Breakdown Harga Ecer per 250g, 500g, 1kg --}}
+                          <div class="mb-4 bg-emerald-50/60 p-3 rounded-2xl border border-emerald-100/80 space-y-1.5">
+                            <div class="text-3xs font-extrabold uppercase tracking-wider text-emerald-800 flex items-center justify-between">
+                              <span>Pilihan Paket Ecer:</span>
+                              <span class="text-gray-400 font-normal">({{ number_format($produk->selling_price, 0, ',', '.') }}/g)</span>
+                            </div>
+                            <div class="space-y-1 text-xs font-extrabold text-emerald-950">
+                              <div class="bg-white px-2.5 py-1 rounded-lg border border-emerald-100 shadow-2xs flex justify-between items-center">
+                                <span class="text-gray-500 font-semibold">250 gram</span>
+                                <span class="text-emerald-900 font-extrabold">Rp {{ number_format($produk->selling_price * 250, 0, ',', '.') }}</span>
+                              </div>
+                              <div class="bg-white px-2.5 py-1 rounded-lg border border-emerald-100 shadow-2xs flex justify-between items-center">
+                                <span class="text-gray-500 font-semibold">500 gram</span>
+                                <span class="text-emerald-900 font-extrabold">Rp {{ number_format($produk->selling_price * 500, 0, ',', '.') }}</span>
+                              </div>
+                              <div class="bg-white px-2.5 py-1 rounded-lg border border-emerald-100 shadow-2xs flex justify-between items-center">
+                                <span class="text-gray-500 font-semibold">1 kg (1000g)</span>
+                                <span class="text-yellow-600 font-black">Rp {{ number_format($produk->selling_price * 1000, 0, ',', '.') }}</span>
+                              </div>
+                            </div>
+                          </div>
+                        @else
+                          <div class="mb-4">
+                            <span class="text-yellow-600 font-black text-2xl">
+                              Rp {{ number_format($produk->selling_price, 0, ',', '.') }}
+                            </span>
+                            @if(!empty($produk->price_unit))
+                              <span class="text-gray-400 text-xs font-medium">/ {{ $produk->price_unit }}</span>
+                            @endif
+                          </div>
+                        @endif
+                      @endif
                     </div>
                     
                     <a 
