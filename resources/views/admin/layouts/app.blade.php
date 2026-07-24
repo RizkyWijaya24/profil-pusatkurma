@@ -4,6 +4,13 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>@yield('title', 'Admin') — Pusat Kurma Premium</title>
+  <!-- Favicon / Logo Toko -->
+  @if(!empty($globalSettings['store_logo'] ?? ''))
+    <link rel="icon" href="{{ asset($globalSettings['store_logo']) }}" />
+    <link rel="apple-touch-icon" href="{{ asset($globalSettings['store_logo']) }}" />
+  @else
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon" />
+  @endif
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
   <script src="https://cdn.tailwindcss.com"></script>

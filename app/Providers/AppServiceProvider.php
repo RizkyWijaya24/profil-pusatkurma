@@ -3,6 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\URL;
+use App\Models\Setting;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -37,8 +41,17 @@ class AppServiceProvider extends ServiceProvider
         if (!empty($appUrl)) {
             if (preg_match('/^(https?):(?!\/\/)/i', $appUrl)) {
                 $fixedUrl = preg_replace('/^(https?):/i', '$1://', $appUrl);
-                \Illuminate\Support\Facades\URL::forceRootUrl($fixedUrl);
+                URL::forceRootUrl($fixedUrl);
             }
+        }
+
+        // Share settings globally to all views for favicon and store logo
+        try {
+            if (Schema::hasTable('settings')) {
+                View::share('globalSettings', Setting::all()->pluck('value', 'key'));
+            }
+        } catch (\Throwable $e) {
+            // Ignore DB exceptions during migrations/CLI
         }
     }
 }

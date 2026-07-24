@@ -14,6 +14,54 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
+// ─── DYNAMIC SITEMAP.XML ──────────────────────────────────────────────
+Route::get('/sitemap.xml', function () {
+    $baseUrl = url('/');
+    $now = date('Y-m-d\TH:i:sP');
+
+    $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+    $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">' . "\n";
+
+    // Homepage
+    $xml .= "  <url>\n";
+    $xml .= "    <loc>{$baseUrl}</loc>\n";
+    $xml .= "    <lastmod>{$now}</lastmod>\n";
+    $xml .= "    <changefreq>daily</changefreq>\n";
+    $xml .= "    <priority>1.0</priority>\n";
+    $xml .= "  </url>\n";
+
+    // Anchor sections
+    foreach (['tentang', 'produk', 'faq', 'kontak'] as $section) {
+        $xml .= "  <url>\n";
+        $xml .= "    <loc>{$baseUrl}/#{$section}</loc>\n";
+        $xml .= "    <lastmod>{$now}</lastmod>\n";
+        $xml .= "    <changefreq>weekly</changefreq>\n";
+        $xml .= "    <priority>0.8</priority>\n";
+        $xml .= "  </url>\n";
+    }
+
+    $xml .= '</urlset>';
+
+    return response($xml, 200, ['Content-Type' => 'application/xml']);
+});
+
+// ─── DYNAMIC ROBOTS.TXT ──────────────────────────────────────────────
+Route::get('/robots.txt', function () {
+    $sitemapUrl = url('/sitemap.xml');
+    $content = "User-agent: *\n";
+    $content .= "Allow: /\n";
+    $content .= "Disallow: /admin/\n\n";
+    $content .= "User-agent: Googlebot\n";
+    $content .= "Allow: /\n\n";
+    $content .= "User-agent: Google-Extended\n";
+    $content .= "Allow: /\n\n";
+    $content .= "User-agent: GPTBot\n";
+    $content .= "Allow: /\n\n";
+    $content .= "Sitemap: {$sitemapUrl}\n";
+
+    return response($content, 200, ['Content-Type' => 'text/plain']);
+});
+
 Route::get('/clear-cache', function() {
     \Illuminate\Support\Facades\Artisan::call('view:clear');
     \Illuminate\Support\Facades\Artisan::call('cache:clear');

@@ -663,6 +663,7 @@
             <textarea rows="2" oninput="updateBranchField(${index}, 'maps_embed_url', this.value)"
                       placeholder="https://www.google.com/maps/embed?pb=..."
                       class="w-full bg-white border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 rounded-lg px-3 py-2 text-xs transition-all outline-none font-medium text-slate-800">${escapeHtml(branch.maps_embed_url || '')}</textarea>
+            <p class="text-3xs text-gray-400 mt-1">Jika dikosongkan, Google Maps akan otomatis tergenerasi di slide berdasarkan Nama & Alamat cabang.</p>
           </div>
         </div>
       </div>

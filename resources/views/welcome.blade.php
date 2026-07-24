@@ -3,9 +3,137 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{{ $settings['store_name'] ?? 'Pusat Kurma Premium Cianjur' }} | Toko Kurma Terpercaya</title>
-  <meta name="description" content="{{ $settings['store_name'] ?? 'Pusat Kurma Premium Cianjur' }} - Distributor kurma impor berkualitas tinggi. Kurma Sukari, Medjool, Ajwa, dan berbagai varian kurma premium dengan harga terbaik. Tersedia grosir & eceran." />
-  <meta name="keywords" content="kurma premium, toko kurma cianjur, kurma sukari, kurma medjool, kurma ajwa, kurma impor" />
+  {{-- ── SEO & META TAGS UTAMA ────────────────────────────────────── --}}
+  <title>{{ $settings['meta_title'] ?? ($settings['store_name'] ?? 'Pusat Kurma Cianjur') . ' - Toko Kurma & Oleh-Oleh Timur Tengah No. 1 di Cianjur & Indonesia' }}</title>
+  <meta name="description" content="{{ $settings['meta_description'] ?? 'Pusat Kurma Cianjur adalah distributor & grosir kurma premium (Sukari, Ajwa, Medjool) serta oleh-oleh Timur Tengah terlengkap dan No. 1 di Cianjur & Indonesia. Melayani eceran, grosir, dan COD.' }}" />
+  <meta name="keywords" content="Pusat Kurma Cianjur, Toko Kurma Cianjur, Oleh-oleh Timur Tengah Cianjur, Grosir Kurma Cianjur, Kurma Sukari Cianjur, Kurma Ajwa Cianjur, Kurma Medjool Cianjur, Air Zamzam Cianjur, Paket Oleh-oleh Haji Umroh Cianjur, Distributor Kurma Indonesia, Jual Kurma Terdekat Cianjur" />
+  <meta name="author" content="Pusat Kurma Cianjur" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <link rel="canonical" href="{{ url()->current() }}" />
+
+  {{-- ── OPEN GRAPH (FACEBOOK, WHATSAPP, LINKEDIN) ────────────────── --}}
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="id_ID" />
+  <meta property="og:site_name" content="{{ $settings['store_name'] ?? 'Pusat Kurma Cianjur' }}" />
+  <meta property="og:title" content="{{ $settings['store_name'] ?? 'Pusat Kurma Cianjur' }} - Toko Kurma & Oleh-Oleh Timur Tengah No. 1" />
+  <meta property="og:description" content="Distributor & Grosir Kurma Premium (Sukari, Ajwa, Medjool) serta Oleh-Oleh Timur Tengah Terlengkap & No. 1 di Cianjur & Indonesia. Melayani eceran, grosir, dan COD." />
+  <meta property="og:url" content="{{ url()->current() }}" />
+  <meta property="og:image" content="{{ !empty($settings['hero_bg_image'] ?? '') ? asset($settings['hero_bg_image']) : asset('favicon.ico') }}" />
+
+  {{-- ── TWITTER CARDS ────────────────────────────────────────────── --}}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{ $settings['store_name'] ?? 'Pusat Kurma Cianjur' }} - Toko Kurma & Oleh-Oleh Timur Tengah No. 1" />
+  <meta name="twitter:description" content="Distributor & Grosir Kurma Premium (Sukari, Ajwa, Medjool) serta Oleh-Oleh Timur Tengah Terlengkap & No. 1 di Cianjur & Indonesia." />
+  <meta name="twitter:image" content="{{ !empty($settings['hero_bg_image'] ?? '') ? asset($settings['hero_bg_image']) : asset('favicon.ico') }}" />
+
+  <!-- Favicon / Logo Toko -->
+  @if(!empty($settings['store_logo'] ?? ''))
+    <link rel="icon" href="{{ asset($settings['store_logo']) }}" />
+    <link rel="apple-touch-icon" href="{{ asset($settings['store_logo']) }}" />
+  @else
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon" />
+  @endif
+
+  {{-- ── JSON-LD SCHEMA MARKUP FOR GOOGLE & AI GEMINI ─────────────── --}}
+  <script type="application/ld+json">
+  {
+    "{{ '@' }}context": "https://schema.org",
+    "{{ '@' }}graph": [
+      {
+        "{{ '@' }}type": ["Store", "LocalBusiness", "Organization"],
+        "{{ '@' }}id": "{{ url('/') }}/#organization",
+        "name": "{{ $settings['store_name'] ?? 'Pusat Kurma Cianjur' }}",
+        "alternateName": ["Pusat Kurma Al Karim", "Grosir Kurma Cianjur", "Distributor Kurma Cianjur", "Pusat Oleh-Oleh Timur Tengah Cianjur"],
+        "url": "{{ url('/') }}",
+        "logo": "{{ !empty($settings['store_logo'] ?? '') ? asset($settings['store_logo']) : asset('favicon.ico') }}",
+        "image": "{{ !empty($settings['hero_bg_image'] ?? '') ? asset($settings['hero_bg_image']) : asset('favicon.ico') }}",
+        "description": "Toko Kurma dan Pusat Oleh-Oleh Timur Tengah No. 1 di Cianjur dan Indonesia. Distributor resmi kurma premium (Sukari, Ajwa, Medjool, Tunisia), Air Zamzam, Sajadah, Kacang Pistachio, Kismis, dan Oleh-Oleh Haji/Umroh.",
+        "telephone": "{{ $settings['wa_number'] ?? '+6281234567890' }}",
+        "priceRange": "$$",
+        "address": {
+          "{{ '@' }}type": "PostalAddress",
+          "streetAddress": "{{ $settings['address'] ?? 'Sukaluyu / Ciranjang, Cianjur' }}",
+          "addressLocality": "Cianjur",
+          "addressRegion": "Jawa Barat",
+          "postalCode": "43214",
+          "addressCountry": "ID"
+        },
+        "geo": {
+          "{{ '@' }}type": "GeoCoordinates",
+          "latitude": -6.811438,
+          "longitude": 107.142935
+        },
+        "openingHoursSpecification": [
+          {
+            "{{ '@' }}type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+            "opens": "08:00",
+            "closes": "20:00"
+          }
+        ],
+        "areaServed": ["Cianjur", "Sukaluyu", "Ciranjang", "Jawa Barat", "Indonesia"],
+        "paymentAccepted": "Cash, Bank Transfer, COD",
+        "currenciesAccepted": "IDR",
+        "hasOfferCatalog": {
+          "{{ '@' }}type": "OfferCatalog",
+          "name": "Katalog Kurma & Oleh-Oleh Timur Tengah",
+          "itemListElement": [
+            { "{{ '@' }}type": "OfferCatalog", "name": "Produk Kurma Premium (Sukari, Ajwa Madinah, Medjool, Tunisia)" },
+            { "{{ '@' }}type": "OfferCatalog", "name": "Air Zamzam Murni & Autentik" },
+            { "{{ '@' }}type": "OfferCatalog", "name": "Kacang Pistachio, Almond & Kismis" },
+            { "{{ '@' }}type": "OfferCatalog", "name": "Perlengkapan & Paket Souvenir Oleh-Oleh Haji / Umroh" }
+          ]
+        }
+      },
+      {
+        "{{ '@' }}type": "FAQPage",
+        "{{ '@' }}id": "{{ url('/') }}/#faq",
+        "mainEntity": [
+          {
+            "{{ '@' }}type": "Question",
+            "name": "Di mana toko kurma terdekat dan terlengkap di Cianjur?",
+            "acceptedAnswer": {
+              "{{ '@' }}type": "Answer",
+              "text": "Pusat Kurma Cianjur adalah toko kurma terdekat dan terlengkap di Cianjur (wilayah Sukaluyu, Ciranjang, dan sekitarnya). Kami menyediakan berbagai jenis kurma impor premium (Sukari, Ajwa, Medjool, Tunisia) serta oleh-oleh Timur Tengah terlengkap."
+            }
+          },
+          {
+            "{{ '@' }}type": "Question",
+            "name": "Apakah Pusat Kurma Cianjur melayani pembelian grosir oleh-oleh Timur Tengah dan COD?",
+            "acceptedAnswer": {
+              "{{ '@' }}type": "Answer",
+              "text": "Ya, kami melayani pembelian grosir maupun eceran dengan pengiriman ke seluruh daerah di Cianjur dan Indonesia. Tersedia juga layanan Cash on Delivery (COD) dan antar gratis untuk wilayah Cianjur kota."
+            }
+          },
+          {
+            "{{ '@' }}type": "Question",
+            "name": "Apa saja jenis kurma premium yang dijual di Pusat Kurma Cianjur?",
+            "acceptedAnswer": {
+              "{{ '@' }}type": "Answer",
+              "text": "Kami menyediakan Kurma Sukari Raja Al Qassim, Kurma Ajwa Nabi Madinah, Kurma Medjool Palestine & California, Kurma Tunisia Tangkai, Kurma Khalas, Air Zamzam murni, Kacang Pistachio, Almond, Kismis, serta Paket Souvenir Oleh-Oleh Haji & Umroh."
+            }
+          },
+          {
+            "{{ '@' }}type": "Question",
+            "name": "Apakah kualitas produk kurma dijamin fresh dan halal?",
+            "acceptedAnswer": {
+              "{{ '@' }}type": "Answer",
+              "text": "Tentu saja. Semua kurma dan produk oleh-oleh Timur Tengah di Pusat Kurma Cianjur dijamin 100% Halal, disimpan dalam fasilitas cold storage standar higiene tinggi, sehingga kondisi kurma selalu fresh, lembut, dan manis alami."
+            }
+          },
+          {
+            "{{ '@' }}type": "Question",
+            "name": "Bagaimana cara memesan kurma & paket oleh-oleh Haji/Umroh di Pusat Kurma Cianjur?",
+            "acceptedAnswer": {
+              "{{ '@' }}type": "Answer",
+              "text": "Anda dapat langsung memesan dengan mudah melalui tombol WhatsApp di website ini, memilih produk sesuai katalog, atau mengunjungi toko fisik kami di Cianjur."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
 
   <!-- Google Fonts: Outfit -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -314,15 +442,58 @@
     );
     $storeLogo = $toImageUrl($settings['store_logo'] ?? '');
     $shippingInfo = $settings['shipping_info'] ?? 'Antar gratis area Cianjur kota (min. order 500g). Pengiriman seluruh Indonesia via JNE, J&T, SiCepat.';
+    $defaultSafeMapsEmbed = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3961.6575885884517!2d107.14293457403386!3d-6.8114380666199486!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68530071717d9f%3A0x82f7d7d1d9e394bd!2sPusat%20kurma%20cianjur!5e0!3m2!1sid!2sid!4v1780114983890!5m2!1sid!2sid";
+
+    $cleanMapEmbedUrl = function($rawUrl) use ($defaultSafeMapsEmbed) {
+        if (empty($rawUrl)) return $defaultSafeMapsEmbed;
+        if (preg_match('/src=["\']([^"\']+)["\']/i', $rawUrl, $m)) {
+            $rawUrl = $m[1];
+        }
+        if (preg_match('/^(https?:\/\/[^\s"]+)/i', $rawUrl, $m)) {
+            $rawUrl = $m[1];
+        }
+        if (str_contains($rawUrl, 'embed')) {
+            return $rawUrl;
+        }
+        return $defaultSafeMapsEmbed;
+    };
+
     $mapsEmbedUrlRaw = $settings['maps_embed_url'] ?? '';
-    // Gunakan URL embed yang benar agar tidak memicu notifikasi "open another application"
-    // maps.google.com/maps?output=embed adalah format LAMA yang bermasalah
-    // Format yang aman: google.com/maps/embed?pb=...
-    $defaultSafeMapsEmbed = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15837.356714929936!2d107.13403!3d-6.82185!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68a96e1b5a9cf9%3A0x20e0d4987d91a09c!2sCianjur%2C%20West%20Java!5e0!3m2!1sen!2sid!4v1680000000000!5m2!1sen!2sid";
-    $mapsEmbedUrl = !empty($mapsEmbedUrlRaw) && str_contains($mapsEmbedUrlRaw, 'embed')
-      ? $mapsEmbedUrlRaw
-      : $defaultSafeMapsEmbed;
-    $branches = json_decode($settings['branches'] ?? '[]', true);
+    $mapsEmbedUrl = $cleanMapEmbedUrl($mapsEmbedUrlRaw);
+
+    $rawBranches = json_decode($settings['branches'] ?? '[]', true);
+    if (!is_array($rawBranches)) {
+        $rawBranches = [];
+    }
+
+    // Clean map URLs for all branch entries
+    foreach ($rawBranches as $idx => $b) {
+        if (!empty($b['maps_embed_url'])) {
+            $rawBranches[$idx]['maps_embed_url'] = $cleanMapEmbedUrl($b['maps_embed_url']);
+        }
+    }
+
+    // Check if Toko Pusat is already included in $rawBranches
+    $hasPusat = false;
+    foreach ($rawBranches as $b) {
+        if (isset($b['name']) && (preg_match('/pusat/i', $b['name']) || preg_match('/utama/i', $b['name']))) {
+            $hasPusat = true;
+            break;
+        }
+    }
+
+    $pusatBranch = [
+        'name' => $storeName . ' (Pusat)',
+        'wa_number' => $settings['wa_number'] ?? '',
+        'address' => $addressVal,
+        'maps_embed_url' => $mapsEmbedUrl,
+    ];
+
+    if (!$hasPusat) {
+        $branches = array_merge([$pusatBranch], $rawBranches);
+    } else {
+        $branches = $rawBranches;
+    }
     
     // Stats
     $stats = [
@@ -387,6 +558,7 @@
           <a href="#beranda" class="nav-link text-white/80 hover:text-yellow-400 font-medium text-sm px-3 py-2 rounded-lg hover:bg-white/10 transition-all duration-200">Beranda</a>
           <a href="#tentang" class="nav-link text-white/80 hover:text-yellow-400 font-medium text-sm px-3 py-2 rounded-lg hover:bg-white/10 transition-all duration-200">Tentang Kami</a>
           <a href="#produk" class="nav-link text-white/80 hover:text-yellow-400 font-medium text-sm px-3 py-2 rounded-lg hover:bg-white/10 transition-all duration-200">Produk Unggulan</a>
+          <a href="#faq" class="nav-link text-white/80 hover:text-yellow-400 font-medium text-sm px-3 py-2 rounded-lg hover:bg-white/10 transition-all duration-200">FAQ</a>
           <a href="#kontak" class="nav-link text-white/80 hover:text-yellow-400 font-medium text-sm px-3 py-2 rounded-lg hover:bg-white/10 transition-all duration-200">Kontak</a>
         </nav>
 
@@ -413,6 +585,7 @@
           <a href="#beranda" onclick="closeMenu()" class="text-white/90 hover:text-yellow-400 font-medium text-sm px-4 py-3 rounded-lg hover:bg-white/10 transition-all">🏠 Beranda</a>
           <a href="#tentang" onclick="closeMenu()" class="text-white/90 hover:text-yellow-400 font-medium text-sm px-4 py-3 rounded-lg hover:bg-white/10 transition-all">ℹ️ Tentang Kami</a>
           <a href="#produk" onclick="closeMenu()" class="text-white/90 hover:text-yellow-400 font-medium text-sm px-4 py-3 rounded-lg hover:bg-white/10 transition-all">🛍️ Produk Unggulan</a>
+          <a href="#faq" onclick="closeMenu()" class="text-white/90 hover:text-yellow-400 font-medium text-sm px-4 py-3 rounded-lg hover:bg-white/10 transition-all">❓ FAQ AI</a>
           <a href="#kontak" onclick="closeMenu()" class="text-white/90 hover:text-yellow-400 font-medium text-sm px-4 py-3 rounded-lg hover:bg-white/10 transition-all">📞 Kontak</a>
           <div class="mt-2 flex items-center gap-1.5 bg-yellow-500/20 border border-yellow-400/40 rounded-full px-3 py-1.5 w-fit">
             <span class="text-yellow-400 text-xs">✓</span>
@@ -989,6 +1162,73 @@
     </section>
 
     {{-- ============================================================
+         FAQ SECTION (AI & GEOMETRIC GEO OPTIMIZED)
+    ============================================================ --}}
+    <section id="faq" class="py-20 lg:py-28 bg-slate-50 border-t border-slate-200/80">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        {{-- Section Header --}}
+        <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+          <span class="inline-block text-emerald-700 font-bold text-sm tracking-widest uppercase mb-3">Tanya Jawab (FAQ)</span>
+          <h2 class="text-3xl sm:text-4xl font-black text-emerald-950 leading-tight mb-4">
+            Pertanyaan Sering Diajukan
+          </h2>
+          <p class="text-gray-500 text-base sm:text-lg font-medium leading-relaxed">
+            Informasi lengkap seputar pemesanan kurma, kualitas stok, grosir, hingga layanan pengiriman COD di Pusat Kurma Cianjur.
+          </p>
+        </div>
+
+        {{-- Accordion Container --}}
+        <div class="space-y-4 reveal">
+          @php
+            $faqs = [
+              [
+                'q' => 'Di mana toko kurma terdekat dan terlengkap di Cianjur?',
+                'a' => 'Pusat Kurma Cianjur adalah toko kurma terdekat dan terlengkap yang berlokasi di area Sukaluyu & Ciranjang, Cianjur, Jawa Barat. Kami menyediakan berbagai jenis kurma impor berkualitas tinggi (Sukari, Ajwa Madinah, Medjool, Tunisia) serta oleh-oleh Timur Tengah terlengkap seperti Air Zamzam, Sajadah, Kismis, dan Kacang Pistachio.'
+              ],
+              [
+                'q' => 'Apakah Pusat Kurma Cianjur melayani pembelian grosir oleh-oleh Timur Tengah dan COD?',
+                'a' => 'Ya, tentu saja! Kami melayani pembelian grosir (kemasan karton/dus) maupun eceran. Kami siap mengirimkan pesanan ke seluruh wilayah Cianjur, Jawa Barat, dan seluruh Indonesia. Untuk area Cianjur kota, kami juga menyediakan layanan antar langsung dan Cash on Delivery (COD).'
+              ],
+              [
+                'q' => 'Apa saja jenis kurma premium yang dijual di Pusat Kurma Cianjur?',
+                'a' => 'Varian unggulan kami antara lain: Kurma Sukari Raja Al Qassim (daging lembut & manis basah), Kurma Ajwa Nabi Madinah (autentik & penuh keberkahan), Kurma Medjool Jumbo (manis legit bertekstur tebal), Kurma Tunisia Tangkai (renyah & manis pas), Kurma Khalas, serta Paket Souvenir Hampers Oleh-Oleh Haji/Umroh.'
+              ],
+              [
+                'q' => 'Apakah kualitas produk kurma dijamin fresh dan 100% Halal?',
+                'a' => 'Semua produk kurma dan perlengkapan oleh-oleh Timur Tengah kami dijamin 100% Halal, higienis, dan terbebas dari bahan pengawet buatan. Kami memiliki fasilitas penyimpanan cold storage khusus sehingga kualitas kurma tetap terjaga kesegarannya hingga ke tangan Anda.'
+              ],
+              [
+                'q' => 'Bagaimana cara memesan kurma dan konsultasi harga di Pusat Kurma Cianjur?',
+                'a' => 'Pemesanan sangat mudah! Anda cukup mengklik tombol "Chat WhatsApp Sekarang" atau tombol WA yang ada di website ini untuk terhubung langsung dengan Customer Service kami. Kami siap membantu merekomendasikan varian kurma sesuai budget dan kebutuhan Anda.'
+              ],
+            ];
+          @endphp
+
+          @foreach($faqs as $i => $faq)
+            <details class="group bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 transition-all duration-300 [&[open]]:bg-emerald-50/50 [&[open]]:border-emerald-300 [&[open]]:shadow-md">
+              <summary class="flex justify-between items-center font-extrabold text-emerald-950 text-base sm:text-lg cursor-pointer list-none select-none">
+                <span class="flex items-center gap-3">
+                  <span class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-sm font-black flex-shrink-0">Q{{ $i + 1 }}</span>
+                  <span>{{ $faq['q'] }}</span>
+                </span>
+                <span class="text-emerald-700 transition-transform duration-300 group-open:rotate-180 flex-shrink-0 ml-2">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
+                  </svg>
+                </span>
+              </summary>
+              <div class="mt-4 pt-4 border-t border-emerald-100/80 text-gray-600 text-sm sm:text-base font-medium leading-relaxed pl-11">
+                {{ $faq['a'] }}
+              </div>
+            </details>
+          @endforeach
+        </div>
+
+      </div>
+    </section>
+
+    {{-- ============================================================
          CONTACT SECTION
     ============================================================ --}}
     <section id="kontak" class="py-20 lg:py-28 bg-white">
@@ -1003,150 +1243,130 @@
         {{-- Contact Grid with Form --}}
         <div class="grid lg:grid-cols-12 gap-10 lg:gap-16 items-start mb-16">
 
-          {{-- Left Column: Contact info (col-span-5) --}}
+          {{-- Left Column: Contact info & Branch Slide Maps (col-span-5) --}}
           <div class="lg:col-span-5 reveal-slide-right space-y-5">
-            @if(!empty($branches))
-              <div class="space-y-4">
-                <div class="font-extrabold text-emerald-950 text-lg flex items-center justify-between border-b border-slate-100 pb-2.5 flex-wrap gap-2">
-                  <div class="flex items-center gap-2">
-                    <span>📍</span> Cabang Resmi Toko Kami
-                  </div>
-                  {{-- Navigation Buttons for Branch Swiper --}}
-                  <div class="flex items-center gap-1.5 z-10">
-                    <button class="branch-prev-btn w-9 h-9 bg-white text-emerald-900 border border-emerald-100 hover:bg-emerald-900 hover:text-white rounded-xl flex items-center justify-center shadow-sm transition-all duration-200 cursor-pointer" aria-label="Sebelumnya">
-                      <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
-                      </svg>
-                    </button>
-                    <button class="branch-next-btn w-9 h-9 bg-white text-emerald-900 border border-emerald-100 hover:bg-emerald-900 hover:text-white rounded-xl flex items-center justify-center shadow-sm transition-all duration-200 cursor-pointer" aria-label="Selanjutnya">
-                      <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
-                      </svg>
-                    </button>
-                  </div>
+            <div class="space-y-4">
+              <div class="font-extrabold text-emerald-950 text-lg flex items-center justify-between border-b border-slate-100 pb-2.5 flex-wrap gap-2">
+                <div class="flex items-center gap-2">
+                  <span>📍</span> Lokasi Cabang Toko (Slide Map)
                 </div>
-                
-                {{-- Swiper Slider for Branches --}}
-                <div class="swiper branchSwiper rounded-2xl overflow-hidden pb-8 relative">
-                  <div class="swiper-wrapper">
-                    @foreach($branches as $index => $branch)
-                      @php
-                        $branchWaClean = preg_replace('/\D/', '', $branch['wa_number'] ?? '');
-                      @endphp
-                      <div class="swiper-slide h-auto">
-                        <div class="branch-card bg-slate-50 border border-slate-100 rounded-2xl p-5 space-y-4 hover:border-emerald-200 hover:bg-emerald-50/10 transition-all duration-200 group relative flex flex-col justify-between h-full">
-                          <div class="space-y-4">
-                            <div class="flex justify-between items-start gap-2">
-                              <h4 class="font-extrabold text-emerald-950 text-base group-hover:text-emerald-800 transition-colors">
+                {{-- Navigation Buttons for Branch Swiper --}}
+                <div class="flex items-center gap-1.5 z-10">
+                  <button class="branch-prev-btn w-9 h-9 bg-white text-emerald-900 border border-emerald-100 hover:bg-emerald-900 hover:text-white rounded-xl flex items-center justify-center shadow-sm transition-all duration-200 cursor-pointer" aria-label="Sebelumnya">
+                    <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  <button class="branch-next-btn w-9 h-9 bg-white text-emerald-900 border border-emerald-100 hover:bg-emerald-900 hover:text-white rounded-xl flex items-center justify-center shadow-sm transition-all duration-200 cursor-pointer" aria-label="Selanjutnya">
+                    <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              
+              {{-- Swiper Slider for Branches with Maps --}}
+              <div class="swiper branchSwiper rounded-2xl overflow-hidden pb-9 relative">
+                <div class="swiper-wrapper">
+                  @foreach($branches as $index => $branch)
+                    @php
+                      $branchWaClean = preg_replace('/\D/', '', $branch['wa_number'] ?? '');
+                      $resolvedMapUrl = !empty($branch['maps_embed_url']) && str_contains($branch['maps_embed_url'], 'embed')
+                        ? $branch['maps_embed_url']
+                        : "https://maps.google.com/maps?q=" . urlencode(($branch['name'] ?? '') . ' ' . ($branch['address'] ?? '')) . "&t=&z=15&ie=UTF8&iwloc=&output=embed";
+                      $branchNavUrl = "https://www.google.com/maps/search/?api=1&query=" . urlencode(($branch['name'] ?? '') . ' ' . ($branch['address'] ?? ''));
+                    @endphp
+                    <div class="swiper-slide h-auto">
+                      <div class="branch-card bg-slate-50 border border-slate-100 rounded-3xl p-5 space-y-4 hover:border-emerald-300 hover:bg-white hover:shadow-lg transition-all duration-300 group flex flex-col justify-between h-full">
+                        <div class="space-y-3">
+                          <div class="flex justify-between items-start gap-2">
+                            <div>
+                              <span class="inline-block text-3xs font-extrabold text-emerald-800 bg-emerald-100/80 px-2.5 py-0.5 rounded-full uppercase tracking-wider mb-1">
+                                Cabang Resmi #{{ $index + 1 }}
+                              </span>
+                              <h4 class="font-extrabold text-emerald-950 text-base sm:text-lg group-hover:text-emerald-800 transition-colors leading-snug">
                                 {{ $branch['name'] }}
                               </h4>
-                              <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 text-2xs font-extrabold flex items-center justify-center flex-shrink-0">
-                                {{ $index + 1 }}
-                              </span>
                             </div>
-                            <p class="text-gray-600 font-semibold text-xs leading-relaxed line-clamp-3">
-                              {{ $branch['address'] }}
-                            </p>
+                            <span class="w-8 h-8 rounded-xl bg-emerald-900 text-yellow-400 font-black text-xs flex items-center justify-center shadow-sm flex-shrink-0">
+                              📍
+                            </span>
                           </div>
 
-                          <div class="flex flex-wrap gap-2 pt-3 border-t border-slate-100/50 mt-4">
-                            @if(!empty($branch['wa_number']))
-                              <a href="https://api.whatsapp.com/send?phone={{ $branchWaClean }}" target="_blank" rel="noopener noreferrer" 
-                                 class="flex-1 min-w-[100px] bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-3 py-2.5 rounded-xl transition-all text-center flex items-center justify-center gap-1.5 shadow-sm hover:shadow">
-                                <span>💬</span> WhatsApp
-                              </a>
-                            @endif
-                            @php
-                              // Gunakan format embed yang aman, hindari maps.google.com/maps?output=embed
-                              $resolvedMapUrl = !empty($branch['maps_embed_url']) && str_contains($branch['maps_embed_url'], 'embed')
-                                ? $branch['maps_embed_url']
-                                : $mapsEmbedUrl;
-                            @endphp
-                            <button type="button" 
-                                    onclick="changeActiveMap('{{ $resolvedMapUrl }}', '{{ addslashes($branch['name']) }}')"
-                                    class="flex-1 min-w-[100px] bg-white border border-slate-200 hover:border-emerald-500 hover:text-emerald-700 text-gray-700 font-bold text-xs px-3 py-2.5 rounded-xl transition-all text-center flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
-                              <span>🗺️</span> Lihat Peta
-                            </button>
+                          <div class="flex items-start gap-2 text-gray-600 font-medium text-xs leading-relaxed">
+                            <svg class="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            <span class="line-clamp-2">{{ $branch['address'] }}</span>
+                          </div>
+
+                          {{-- Embedded Google Map in Slide Card --}}
+                          <div class="relative w-full aspect-[16/10] rounded-2xl overflow-hidden border border-slate-200/80 shadow-inner bg-slate-100">
+                            <iframe
+                              src="{{ $resolvedMapUrl }}"
+                              class="w-full h-full border-0"
+                              allowfullscreen=""
+                              loading="lazy"
+                              referrerpolicy="no-referrer-when-downgrade"
+                              title="Map {{ $branch['name'] }}"
+                            ></iframe>
                           </div>
                         </div>
+
+                        {{-- Action Buttons --}}
+                        <div class="pt-3 border-t border-slate-200/60 mt-3 flex flex-wrap gap-2">
+                          @if(!empty($branch['wa_number']))
+                            <a href="https://api.whatsapp.com/send?phone={{ $branchWaClean }}&amp;text={{ urlencode('Halo Admin ' . $branch['name'] . ', saya ingin bertanya lokasi dan produk.') }}"
+                               target="_blank" rel="noopener noreferrer" 
+                               class="flex-1 min-w-[110px] bg-emerald-900 hover:bg-emerald-800 text-white font-extrabold text-xs px-3 py-2.5 rounded-xl transition-all text-center flex items-center justify-center gap-1.5 shadow-sm hover:shadow">
+                              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                              </svg>
+                              <span>WhatsApp</span>
+                            </a>
+                          @endif
+                          <a href="{{ $branchNavUrl }}" target="_blank" rel="noopener noreferrer" 
+                             class="flex-1 min-w-[110px] bg-white border border-slate-200 hover:border-emerald-500 hover:text-emerald-700 text-gray-700 font-extrabold text-xs px-3 py-2.5 rounded-xl transition-all text-center flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
+                            <span>🗺️</span> Google Maps
+                          </a>
+                          <button type="button" 
+                                  onclick="changeActiveMap('{{ $resolvedMapUrl }}', '{{ addslashes($branch['name']) }}')"
+                                  class="w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs px-3 py-2 rounded-xl transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer mt-1">
+                            <span>🔍</span> Perbesar di Peta Utama
+                          </button>
+                        </div>
                       </div>
-                    @endforeach
-                  </div>
-                  {{-- Pagination --}}
-                  <div class="swiper-pagination branch-swiper-pagination !bottom-0"></div>
-                </div>
-
-                {{-- Other General Info --}}
-                <div class="grid grid-cols-2 gap-3 pt-3">
-                  <div class="flex items-start gap-3 bg-slate-50 rounded-2xl p-4 border border-slate-100">
-                    <div class="w-9 h-9 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0 text-lg">
-                      🛵
                     </div>
-                    <div class="min-w-0">
-                      <div class="font-extrabold text-emerald-950 text-xs mb-0.5">Pengiriman</div>
-                      <div class="text-gray-600 font-semibold text-3xs leading-snug line-clamp-3">{!! nl2br(e($shippingInfo)) !!}</div>
-                    </div>
-                  </div>
-
-                  <div class="flex items-start gap-3 bg-slate-50 rounded-2xl p-4 border border-slate-100">
-                    <div class="w-9 h-9 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0 text-lg">
-                      🕐
-                    </div>
-                    <div class="min-w-0">
-                      <div class="font-extrabold text-emerald-950 text-xs mb-0.5">Operasional</div>
-                      <div class="text-gray-600 font-semibold text-3xs leading-snug line-clamp-3">{{ $hoursVal }}</div>
-                    </div>
-                  </div>
+                  @endforeach
                 </div>
-              </div>
-            @else
-              {{-- Fallback: Old Layout for single address --}}
-              <div class="flex items-start gap-4 bg-slate-50 rounded-2xl p-5 border border-slate-100">
-                <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <span class="text-2xl">📍</span>
-                </div>
-                <div>
-                  <div class="font-extrabold text-emerald-950 text-base mb-1">Alamat Toko</div>
-                  <div class="text-gray-600 font-medium text-sm leading-relaxed">{!! nl2br(e($addressVal)) !!}</div>
-                </div>
+                {{-- Pagination --}}
+                <div class="swiper-pagination branch-swiper-pagination !bottom-0"></div>
               </div>
 
-              <div class="flex items-start gap-4 bg-slate-50 rounded-2xl p-5 border border-slate-100">
-                <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <span class="text-2xl">📱</span>
+              {{-- Other General Info --}}
+              <div class="grid grid-cols-2 gap-3 pt-1">
+                <div class="flex items-start gap-3 bg-slate-50 rounded-2xl p-4 border border-slate-100">
+                  <div class="w-9 h-9 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0 text-lg">
+                    🛵
+                  </div>
+                  <div class="min-w-0">
+                    <div class="font-extrabold text-emerald-950 text-xs mb-0.5">Pengiriman</div>
+                    <div class="text-gray-600 font-semibold text-3xs leading-snug line-clamp-3">{!! nl2br(e($shippingInfo)) !!}</div>
+                  </div>
                 </div>
-                <div>
-                  <div class="font-extrabold text-emerald-950 text-base mb-1">WhatsApp / Telepon</div>
-                  <div class="text-gray-600 font-medium text-sm leading-relaxed">
-                    <a href="https://api.whatsapp.com/send?phone={{ $waNumClean }}" target="_blank" rel="noopener noreferrer" class="text-emerald-700 font-bold hover:text-emerald-900 transition-colors">+{{ $settings['wa_number'] ?? '6281234567890' }}</a>
-                    <br/><span class="text-gray-400 text-xs">Senin – Sabtu: 08.00 – 20.00 WIB</span>
+
+                <div class="flex items-start gap-3 bg-slate-50 rounded-2xl p-4 border border-slate-100">
+                  <div class="w-9 h-9 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0 text-lg">
+                    🕐
+                  </div>
+                  <div class="min-w-0">
+                    <div class="font-extrabold text-emerald-950 text-xs mb-0.5">Operasional</div>
+                    <div class="text-gray-600 font-semibold text-3xs leading-snug line-clamp-3">{{ $hoursVal }}</div>
                   </div>
                 </div>
               </div>
-
-              <div class="flex items-start gap-4 bg-slate-50 rounded-2xl p-5 border border-slate-100">
-                <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <span class="text-2xl">🛵</span>
-                </div>
-                <div>
-                  <div class="font-extrabold text-emerald-950 text-base mb-1">Layanan Pengiriman</div>
-                  <div class="text-gray-600 font-medium text-sm leading-relaxed">{!! nl2br(e($shippingInfo)) !!}</div>
-                </div>
-              </div>
-
-              <div class="flex items-start gap-4 bg-slate-50 rounded-2xl p-5 border border-slate-100">
-                <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <span class="text-2xl">🕐</span>
-                </div>
-                <div>
-                  <div class="font-extrabold text-emerald-950 text-base mb-1">Jam Operasional</div>
-                  <div class="text-gray-600 font-medium text-sm leading-relaxed">
-                    {{ $hoursVal }}
-                    <br/><span class="text-red-500 font-semibold text-xs mt-1 block">Minggu: Libur (Pelayanan Online Saja)</span>
-                  </div>
-                </div>
-              </div>
-            @endif
+            </div>
           </div>
 
           {{-- Right Column: Beautiful Contact Form (col-span-7) --}}
@@ -1492,10 +1712,26 @@
         nextEl: '.branch-next-btn',
         prevEl: '.branch-prev-btn',
       },
+      on: {
+        slideChange: function () {
+          const activeSlide = this.slides[this.activeIndex];
+          if (activeSlide) {
+            const btn = activeSlide.querySelector('button[onclick*="changeActiveMap"]');
+            if (btn) {
+              const onclickAttr = btn.getAttribute('onclick');
+              if (onclickAttr) {
+                const matches = onclickAttr.match(/changeActiveMap\('(.*?)',\s*'(.*?)'\)/);
+                if (matches && matches[1]) {
+                  syncMainMap(matches[1], matches[2]);
+                }
+              }
+            }
+          }
+        }
+      }
     });
 
-    // Change Active Map for branches
-    window.changeActiveMap = function(embedUrl, name) {
+    function syncMainMap(embedUrl, name) {
       const mapFrame = document.getElementById('active-store-map');
       const mapLink = document.getElementById('active-store-map-link');
       const mapText = document.getElementById('active-store-map-text');
@@ -1510,10 +1746,15 @@
       if (mapLink) {
         mapLink.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(name);
       }
+    }
+
+    // Change Active Map for branches with smooth scroll
+    window.changeActiveMap = function(embedUrl, name) {
+      syncMainMap(embedUrl, name);
       
-      // Smooth scroll to map frame
-      const mapContainer = mapFrame.closest('.reveal');
-      if (mapContainer) {
+      const mapFrame = document.getElementById('active-store-map');
+      if (mapFrame) {
+        const mapContainer = mapFrame.closest('.reveal') || mapFrame;
         mapContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     };
