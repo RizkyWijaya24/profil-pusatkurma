@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class SettingController extends Controller
@@ -157,6 +158,15 @@ class SettingController extends Controller
             Setting::set('about_image', $about_image_url);
         }
 
+        // Clear POS catalog cache so updated settings take effect immediately
+        Cache::forget('katalog_produk_pos_cache');
+
         return back()->with('success', 'Pengaturan berhasil disimpan!');
+    }
+
+    public function clearPosCache()
+    {
+        Cache::forget('katalog_produk_pos_cache');
+        return back()->with('success', 'Cache katalog POS berhasil diperbarui!');
     }
 }

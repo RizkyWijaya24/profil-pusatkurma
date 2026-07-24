@@ -162,5 +162,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
         Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
+        Route::post('/settings/clear-pos-cache', [SettingController::class, 'clearPosCache'])->name('settings.clear-pos-cache');
     });
 });

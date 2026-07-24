@@ -83,6 +83,12 @@
         <span class="text-2xl">🌐</span>
         <span class="text-purple-800 font-semibold text-xs">Lihat Website</span>
       </a>
+      <form action="{{ route('admin.settings.clear-pos-cache') }}" method="POST" class="col-span-2">
+        @csrf
+        <button type="submit" class="w-full flex items-center justify-center gap-2 bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-xs p-3.5 rounded-xl transition-all shadow-sm cursor-pointer hover:shadow-md">
+          <span>🔄</span> Refresh Cache Katalog POS (Perbarui Data Instan)
+        </button>
+      </form>
     </div>
   </div>
 </div>

@@ -571,10 +571,15 @@
               ⚠️ Database POS Off / Offline ({{ $pos_connection_error }})
             </span>
           @else
-            <span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs px-3 py-1 rounded-full font-bold flex items-center gap-1.5">
-              <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-              <span>Terhubung ({{ count($pos_products) }} Produk Terdeteksi)</span>
-            </span>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs px-3 py-1 rounded-full font-bold flex items-center gap-1.5">
+                <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                <span>Terhubung ({{ count($pos_products) }} Produk)</span>
+              </span>
+              <button type="submit" class="bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-xs px-3.5 py-1.5 rounded-lg shadow-xs transition-colors cursor-pointer flex items-center gap-1">
+                <span>🔄</span> Refresh Cache POS
+              </button>
+            </div>
           @endif
         </div>
         
