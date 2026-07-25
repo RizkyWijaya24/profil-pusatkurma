@@ -1803,5 +1803,8 @@
     };
   </script>
 
+  {{-- Interactive Chatbot Assistant --}}
+  @include('partials.chatbot')
+
 </body>
 </html>

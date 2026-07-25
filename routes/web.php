@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 // ─── PUBLIC ROUTES ───────────────────────────────────────────────
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+Route::post('/chatbot/message', [App\Http\Controllers\ChatbotController::class, 'message'])->name('chatbot.message');
 
 // ─── DYNAMIC SITEMAP.XML ──────────────────────────────────────────────
 Route::get('/sitemap.xml', function () {
