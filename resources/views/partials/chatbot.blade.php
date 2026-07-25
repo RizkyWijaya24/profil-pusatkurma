@@ -5,7 +5,7 @@
 
   {{-- CHATBOX MODAL WINDOW --}}
   <div id="chatbot-modal" 
-       class="pointer-events-auto hidden w-[92vw] sm:w-[380px] max-w-[400px] h-[calc(100vh-140px)] sm:h-[480px] max-h-[500px] bg-white rounded-3xl shadow-2xl border border-emerald-100/90 flex flex-col overflow-hidden transition-all duration-300 transform scale-95 opacity-0 origin-bottom-right mb-3">
+       class="pointer-events-auto hidden w-[92vw] sm:w-[380px] max-w-[400px] h-[calc(100vh-115px)] max-h-[calc(100vh-115px)] sm:max-h-[520px] bg-white rounded-3xl shadow-2xl border border-emerald-100/90 flex flex-col overflow-hidden transition-all duration-300 transform scale-95 opacity-0 origin-bottom-right mb-3">
     
     {{-- Chat Header --}}
     <div class="bg-gradient-to-r from-emerald-950 via-emerald-900 to-emerald-800 text-white p-4 flex items-center justify-between shadow-md relative overflow-hidden">
